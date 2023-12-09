@@ -41,28 +41,7 @@ const routes = [
     path: "/",
     element: <App />,
     children: [
-      { path: "/", loader: () => redirect("/draw") },
-      {
-        path: "draw",
-        children: [
-          { index: true, element: <DrawIndex /> },
-          { path: "game/:collectionAddress", element: <DrawGameDetails /> },
-          { path: "pool/:id", element: <DrawPoolEntry /> },
-        ],
-      },
-      {
-        path: "market",
-        children: [
-          { index: true, element: <MarketIndex /> },
-          {
-            path: "game/:collectionAddress",
-            children: [
-              { index: true, element: <MarketGameDetails /> },
-              { path: "item/:tokenAddress", element: <MarketItemDetails /> },
-            ],
-          },
-        ],
-      },
+      { path: "/", loader: () => redirect("/inventory") },
       {
         path: "inventory",
         children: [
@@ -87,6 +66,27 @@ const routes = [
               { path: "2", element: <InventoryCreateDrawStep2 /> },
               { path: "3", element: <InventoryCreateDrawStep3 /> },
               { path: "result", element: <InventoryCreateDrawResult /> },
+            ],
+          },
+        ],
+      },
+      {
+        path: "draw",
+        children: [
+          { index: true, element: <DrawIndex /> },
+          { path: "game/:collectionAddress", element: <DrawGameDetails /> },
+          { path: "pool/:id", element: <DrawPoolEntry /> },
+        ],
+      },
+      {
+        path: "market",
+        children: [
+          { index: true, element: <MarketIndex /> },
+          {
+            path: "game/:collectionAddress",
+            children: [
+              { index: true, element: <MarketGameDetails /> },
+              { path: "item/:tokenAddress", element: <MarketItemDetails /> },
             ],
           },
         ],

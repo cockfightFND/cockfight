@@ -1,6 +1,5 @@
 import { Title } from "@mantine/core"
-import DrawIndexCarousel from "./DrawIndexCarousel"
-import DrawIndexGameList from "./DrawIndexGameList"
+import GameIndexCarousel from "../Custom/GameIndexCarousel"
 
 const DrawIndex = () => {
   return (
@@ -9,8 +8,7 @@ const DrawIndex = () => {
         CockFight
       </Title>
 
-      <DrawIndexCarousel />
-      {/* <DrawIndexGameList /> */}
+      <GameIndexCarousel></GameIndexCarousel>
     </>
   )
 }

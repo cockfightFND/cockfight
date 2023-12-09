@@ -3,20 +3,16 @@ import { useResetRecoilState } from "recoil"
 import { Stack } from "@mantine/core"
 import PageTitle from "../../../components/PageTitle"
 import { marketFilterState } from "../Game/market-filter"
-import MarketIndexCarousel from "./MarketIndexCarousel"
+import MarketGrid from "../Custom/MarketGrid"
 
 const MarketIndex = () => {
-  const resetRecoilState = useResetRecoilState(marketFilterState)
-
-  useEffect(() => {
-    resetRecoilState()
-  }, [resetRecoilState])
-
   return (
-    <Stack spacing={8}>
-      <PageTitle>Market</PageTitle>
-      {/* <MarketIndexCarousel /> */}
-    </Stack>
+    <>
+      <Stack spacing={8}>
+        <PageTitle>Market</PageTitle>
+        <MarketGrid></MarketGrid>
+      </Stack>
+    </>
   )
 }
 

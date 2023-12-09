@@ -3,9 +3,7 @@ import PageTitle from "../../../components/PageTitle"
 import { useAddress } from "../../../data/account"
 import { GLOBAL_PADDING } from "../../../styles/variables"
 import MyIndexBalance from "./MyIndexBalance"
-import MyIndexTabs from "./MyIndexTabs"
 import CreateAccount from "../../Inventory/Account/CreateAccount"
-import Temp from "../../Custom/temp"
 
 const MyIndex = () => {
   const address = useAddress()
@@ -17,14 +15,7 @@ const MyIndex = () => {
       <Box bg="white" m={-GLOBAL_PADDING} mb={0} p={GLOBAL_PADDING}>
         <PageTitle>My Page</PageTitle>
         <MyIndexBalance />
-        
       </Box>
-      
-      <Box bg="white" m={-GLOBAL_PADDING} mb={0} p={GLOBAL_PADDING}>
-        <Temp/>
-      </Box>
-      
-      {/* {address && <MyIndexTabs />} */}
     </>
   )
 }
