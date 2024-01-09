@@ -1,23 +1,21 @@
-import * as http from 'http';
-import { initApp } from './app';
-import { KoaController } from 'koa-joi-controllers';
-let server: http.Server;
+import http from 'http'
+import { config } from 'config'
+import { apiLogger as logger } from 'lib/logger'
+import { createApp } from './app'
 
-export async function initServer(
-  controllers: KoaController[],
-  port: number
-): Promise<http.Server> {
-  const app = await initApp(controllers);
+let server: http.Server
 
-  server = http.createServer(app.callback());
+export async function initServer(): Promise<http.Server> {
+  const app = await createApp()
 
-  server.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-  });
+  server = http.createServer(app.callback())
+  server.listen(config.SERVER_PORT, () => {
+    logger.info(`Listening on port ${config.SERVER_PORT}`)
+  })
 
-  return server;
+  return server
 }
 
 export function finalizeServer(): void {
-  server.close();
+  server.close()
 }

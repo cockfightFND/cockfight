@@ -1,59 +1,104 @@
-// import { controllers } from 'controller'
-import * as Koa from 'koa';
-import * as bodyParser from 'koa-body';
-import * as Router from 'koa-router';
-import * as cors from '@koa/cors';
-import { errorHandler, APIError, ErrorTypes } from 'lib/error';
-import { error } from 'lib/response';
-import { KoaController, configureRoutes } from 'koa-joi-controllers';
-import { createApiDocApp } from './apidoc';
-import * as mount from 'koa-mount';
+import path from 'path'
+import Koa from 'koa'
+import bodyParser from 'koa-body'
+import Router from 'koa-router'
+import cors from '@koa/cors'
+import morgan from 'koa-morgan'
+// import  helmet from 'koa-helmet'
+import serve from 'koa-static'
+import mount from 'koa-mount'
+import { APIError, ErrorTypes, errorHandler } from 'lib/error'
+import { error } from 'lib/response'
+import { configureRoutes } from 'koa-joi-controllers'
+import { router as swaggerRouter } from 'swagger/swagger'
+import { apiLogger as logger } from 'lib/logger'
+import controllers from 'controller'
 
 const notFoundMiddleware: Koa.Middleware = (ctx) => {
-  ctx.status = 404;
-};
+  ctx.status = 404
+}
 
-export async function initApp(controllers: KoaController[]): Promise<Koa> {
-  const app = new Koa();
+function getRootApp(): Koa {
+  // root app only contains the health check route
+  const app = new Koa()
+  const router = new Router()
 
-  const apiDocApp = createApiDocApp();
+  router.get('/health', async (ctx) => {
+    ctx.status = 200
+    ctx.body = 'OK'
+  })
 
-  app.proxy = true;
+  app.use(router.routes())
+  app.use(router.allowedMethods())
+
+  return app
+}
+
+function createApiDocApp(): Koa {
+  // static
+  const app = new Koa()
+
   app
-    .use(cors())
+    .use(
+      serve(path.resolve(__dirname, '..', 'static'), {
+        maxage: 86400 * 1000,
+      })
+    )
+    .use(notFoundMiddleware)
+
+  return app
+}
+
+async function createAPIApp(): Promise<Koa> {
+  const app = new Koa()
+
+  app
     .use(errorHandler(error))
     .use(async (ctx, next) => {
-      await next();
+      await next()
 
-      ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-      ctx.set('Pragma', 'no-cache');
-      ctx.set('Expires', '0');
+      ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate')
+      ctx.set('Pragma', 'no-cache')
+      ctx.set('Expires', '0')
     })
     .use(
       bodyParser({
+        formLimit: '512kb',
+        jsonLimit: '512kb',
+        textLimit: '512kb',
         multipart: true,
         onError: (error) => {
           throw new APIError(
             ErrorTypes.INVALID_REQUEST_ERROR,
-            undefined,
-            error.message
-          );
-        }
+            '',
+            error.message,
+            error
+          )
+        },
       })
-    );
+    )
 
-  const router = new Router();
+  configureRoutes(app, controllers)
+  app.use(notFoundMiddleware)
+  return app
+}
 
-  router.get('/health', async (ctx) => {
-    ctx.status = 200;
-    ctx.body = 'OK';
-  });
+export async function createApp(): Promise<Koa> {
+  const app = getRootApp()
 
-  app.use(router.routes());
-  app.use(router.allowedMethods());
-  app.use(mount('/apidoc', apiDocApp));
-  configureRoutes(app, controllers);
-  app.use(notFoundMiddleware);
+  logger.info('Adding REST API')
+  app.proxy = true
 
-  return app;
+  const apiDocApp = createApiDocApp()
+  const apiApp = await createAPIApp()
+
+  app
+    .use(morgan('common'))
+    .use(cors())
+    .use(swaggerRouter.routes())
+    .use(swaggerRouter.allowedMethods())
+    .use(mount('/apidoc', apiDocApp))
+    .use(mount('/', apiApp))
+
+  return app
 }

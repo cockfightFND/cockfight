@@ -65,6 +65,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^4.33.0
     version: 4.33.0(react-dom@18.2.0)(react@18.2.0)
+  '@toruslabs/openlogin':
+    specifier: ^6.1.0
+    version: 6.1.0(@babel/runtime@7.23.2)
   '@types/react-beautiful-dnd':
     specifier: ^13.1.4
     version: 13.1.4
@@ -3166,6 +3169,15 @@ packages:
       '@babel/runtime': 7.23.2
     dev: false
 
+  /@toruslabs/constants@13.1.0(@babel/runtime@7.23.2):
+    resolution: {integrity: sha512-W1LyRoM5xCTyNivGnxa+mOit4yWPZjyYHfM+whYBujP1nQVnJ09nSFCBn1ePm6ONxB5mp58jsI3TJugeY2KFSg==}
+    engines: {node: '>=18.x', npm: '>=9.x'}
+    peerDependencies:
+      '@babel/runtime': 7.x
+    dependencies:
+      '@babel/runtime': 7.23.2
+    dev: false
+
   /@toruslabs/eccrypto@4.0.0:
     resolution: {integrity: sha512-Z3EINkbsgJx1t6jCDVIJjLSUEGUtNIeDjhMWmeDGOWcP/+v/yQ1hEvd1wfxEz4q5WqIHhevacmPiVxiJ4DljGQ==}
     engines: {node: '>=18.x', npm: '>=9.x'}
@@ -3248,6 +3260,17 @@ packages:
       base64url: 3.0.1
     dev: false
 
+  /@toruslabs/openlogin-utils@6.1.0(@babel/runtime@7.23.2):
+    resolution: {integrity: sha512-X3xBui0GKiK5JZ677Q4UhLvMn1FOjL1a+1y9qPAn+b+bh41Gg1c8G/VMGRqMuu7owdQGY3B6f7XWuRSEYNk8kQ==}
+    engines: {node: '>=18.x', npm: '>=9.x'}
+    peerDependencies:
+      '@babel/runtime': 7.x
+    dependencies:
+      '@babel/runtime': 7.23.2
+      '@toruslabs/constants': 13.1.0(@babel/runtime@7.23.2)
+      base64url: 3.0.1
+    dev: false
+
   /@toruslabs/openlogin@5.2.0(@babel/runtime@7.23.2):
     resolution: {integrity: sha512-eVopWU4X56kOjPl/nr2E9v0Mv8s90Z0QJULnO1sIQhUZm60Ip/djARKNtXsYHMMG7nuQ8pDCyDtxN4akA/sF+A==}
     engines: {node: '>=18.x', npm: '>=9.x'}
@@ -3271,6 +3294,48 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@toruslabs/openlogin@6.1.0(@babel/runtime@7.23.2):
+    resolution: {integrity: sha512-TEVhx74Kw8H8DuA+XqZYH4j2vcTnsgIF9EnHgEvXuerV9dC4KhUCz/k9jqIVo12rRJKOqTdAmcHSNeje31+1+g==}
+    engines: {node: '>=18.x', npm: '>=9.x'}
+    peerDependencies:
+      '@babel/runtime': 7.x
+    dependencies:
+      '@babel/runtime': 7.23.2
+      '@toruslabs/eccrypto': 4.0.0
+      '@toruslabs/metadata-helpers': 5.0.0(@babel/runtime@7.23.2)
+      '@toruslabs/openlogin-session-manager': 3.0.0(@babel/runtime@7.23.2)
+      '@toruslabs/openlogin-utils': 6.1.0(@babel/runtime@7.23.2)
+      '@toruslabs/secure-pub-sub': 0.0.1(@babel/runtime@7.23.2)
+      bowser: 2.11.0
+      events: 3.3.0
+      loglevel: 1.8.1
+      ts-custom-error: 3.3.1
+    transitivePeerDependencies:
+      - '@sentry/types'
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
+
+  /@toruslabs/secure-pub-sub@0.0.1(@babel/runtime@7.23.2):
+    resolution: {integrity: sha512-fuvjilsNhJ9zdeFcYBwFq6BxhFJU6vkCU3Xm4BcnXLtGxm79N9rj1C8rwFQY2TSgpAcD8NZsuuJqneRG7M9kpg==}
+    engines: {node: '>=18.x', npm: '>=9.x'}
+    peerDependencies:
+      '@babel/runtime': 7.x
+    dependencies:
+      '@babel/runtime': 7.23.2
+      '@toruslabs/eccrypto': 4.0.0
+      '@toruslabs/http-helpers': 5.0.0(@babel/runtime@7.23.2)
+      '@toruslabs/metadata-helpers': 5.0.0(@babel/runtime@7.23.2)
+      loglevel: 1.8.1
+      socket.io-client: 4.7.2
+    transitivePeerDependencies:
+      - '@sentry/types'
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+    dev: false
+
   /@tsconfig/vite-react@2.0.0:
     resolution: {integrity: sha512-erT+k9yzjRYnqRn6Fmvz+Y8+AtE+/YE954frGGwwit2ifsoWzRzYaOTlGj9/z0xJyYiaKNnNiFhid312QdC4rw==}
     dev: true
@@ -3278,7 +3343,7 @@ packages:
   /@types/connect@3.4.37:
     resolution: {integrity: sha512-zBUSRqkfZ59OcwXon4HVxhx5oWCJmc0OtBTK05M+p0dYjgN6iTwIL2T/WbsQZrEsdnwaF9cWQ+azOnpPvIqY3Q==}
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 20.8.10
     dev: false
 
   /@types/debug@4.1.9:
@@ -3412,7 +3477,7 @@ packages:
   /@types/ws@7.4.7:
     resolution: {integrity: sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==}
     dependencies:
-      '@types/node': 12.20.55
+      '@types/node': 20.8.10
     dev: false
 
   /@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.48.0)(typescript@5.2.2):

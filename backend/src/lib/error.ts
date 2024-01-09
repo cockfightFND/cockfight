@@ -1,4 +1,5 @@
-import * as sentry from '@sentry/node';
+import { logger } from 'lib/logger'
+import sentry from '@sentry/node'
 
 export enum ErrorTypes {
   // 400 Bad Request
@@ -19,44 +20,37 @@ export enum ErrorTypes {
   API_ERROR = 'API_ERROR',
   // 503 Service Unavailable
   SERVICE_UNAVAILABLE = 'SERVICE_UNAVAILABLE',
-  LCD_ERROR = 'LCD_ERROR'
+  LCD_ERROR = 'LCD_ERROR',
 }
 
-export enum ErrorCodes {
-  // 400 Bad Request
-  INVALID_REQUEST_ERROR = 400,
-  // 401 Unauthorized
-  AUTHENTICATION_ERROR = 401,
-  // 403 Forbidden
-  FORBIDDEN = 403,
-  // 404
-  NOT_FOUND_ERROR = 404,
-  // 408
-  TIMEOUT = 408,
-  // 429 Too Many Requests
-  RATE_LIMIT_ERROR = 429,
-  // 500 Internal Server Error
-  API_ERROR = 500,
-  // 503 Service Unavailable
-  SERVICE_UNAVAILABLE = 503
+export const HttpStatusCodes = {
+  [ErrorTypes.INVALID_REQUEST_ERROR]: 400, // Bad Request
+  [ErrorTypes.AUTHENTICATION_ERROR]: 401, // Unauthorized
+  [ErrorTypes.NO_PERMISSION_ERROR]: 401,
+  [ErrorTypes.FORBIDDEN]: 403, // Forbidden
+  [ErrorTypes.NOT_FOUND_ERROR]: 404,
+  [ErrorTypes.TIMEOUT]: 408,
+  [ErrorTypes.RATE_LIMIT_ERROR]: 429, // Too Many Requests
+  [ErrorTypes.API_ERROR]: 500,
+  [ErrorTypes.SERVICE_UNAVAILABLE]: 503,
 }
 
 // error message
-const errorMessage = {};
+const errorMessage = {}
 
 export class APIError extends Error {
-  public type: string;
-  public message: string;
-  public code: string;
-  public wrappedError?: Error;
+  public type: string
+  public message: string
+  public code: string
+  public wrappedError?: Error
 
   constructor(type: ErrorTypes, code = '', message = '', err?: Error) {
-    super(message);
-    this.name = 'APIError';
-    this.type = type || ErrorTypes.API_ERROR;
-    this.code = code;
-    this.message = message || errorMessage[code];
-    this.wrappedError = err;
+    super(message)
+    this.name = 'APIError'
+    this.type = type || ErrorTypes.API_ERROR
+    this.code = code
+    this.message = message || errorMessage[code]
+    this.wrappedError = err
   }
 }
 
@@ -65,38 +59,41 @@ export function errorHandler(
 ) {
   return async (ctx, next) => {
     try {
-      await next();
+      await next()
     } catch (err) {
       if (err instanceof APIError) {
         if (err.type === ErrorTypes.LCD_ERROR && err.wrappedError) {
-          ctx.statusCode = (err.wrappedError as any).statusCode;
-          ctx.body = (err.wrappedError as any).body;
+          ctx.statusCode = (err.wrappedError as any).statusCode
+          ctx.body = (err.wrappedError as any).body
         }
 
         if (err.type === ErrorTypes.API_ERROR) {
-          const errForThrow = err.wrappedError || err;
+          logger.info(err)
+          const errForThrow = err.wrappedError || err
 
           sentry.withScope((scope) => {
             scope.addEventProcessor((event) =>
               sentry.Handlers.parseRequest(event, ctx.request)
-            );
-            sentry.captureException(errForThrow);
-          });
+            )
+            sentry.captureException(errForThrow)
+          })
         }
 
-        callback(ctx, err.type, err.code, err.message);
+        callback(ctx, err.type, err.code, err.message)
       } else if (err.isJoi) {
-        callback(ctx, 'INVALID_REQUEST_ERROR', err.statusCode, err.message);
+        callback(ctx, 'INVALID_REQUEST_ERROR', err.statusCode, err.message)
       } else {
+        logger.info(err)
+        console.log(err)
         sentry.withScope((scope) => {
           scope.addEventProcessor((event) =>
             sentry.Handlers.parseRequest(event, ctx.request)
-          );
-          sentry.captureException(err);
-        });
+          )
+          sentry.captureException(err)
+        })
 
-        callback(ctx, 'API_ERROR', err.code, err.message);
+        callback(ctx, 'API_ERROR', err.code, err.message)
       }
     }
-  };
+  }
 }

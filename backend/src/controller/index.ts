@@ -1,10 +1,16 @@
-import { KoaController } from 'koa-joi-controllers';
-import { StageController } from './StageController';
-import { StateController } from './StateController';
-import { UserController } from './UserController';
+import { KoaController } from 'koa-joi-controllers'
+import { BettingController } from './BettingController'
+import { SubmissionController } from './SubmissionController'
 
-export const executorController = [
-  StageController,
-  StateController,
-  UserController
-].map((prototype) => new prototype()) as KoaController[];
+
+const controllers = [
+  BettingController,
+  SubmissionController,
+]
+  .map((prototype) => {
+    const controller = new prototype()
+    return controller
+  })
+  .filter(Boolean) as KoaController[]
+
+export default controllers

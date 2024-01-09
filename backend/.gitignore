@@ -1,18 +1,25 @@
-*.log
+# macOS
 .DS_Store
 
-.idea/
-.vscode/
-coverage/
+# Logs
+logs
 
+# Dependency directories
 node_modules/
+
+# Optional npm cache directory
+.npm
+
+# TypeScript output
 dist/
-apidoc/
-static/
 
+# ormconfig
+ormconfig.json
+
+# direnv
 .envrc
+.env
 build
-logs/
-testing/
-
 temp*
+test/
+logs/

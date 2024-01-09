@@ -1,112 +1,69 @@
-import { MerkleTree } from 'merkletreejs';
-import { sha3_256 } from './util';
-import { WithdrawalTx } from './types';
-import { AccAddress } from '@initia/initia.js';
+import { MerkleTree } from 'merkletreejs'
+import { BCS } from '@initia/initia.js'
+import { sha3_256 } from './util'
+import { Betting} from '../types'
 
 function convertHexToBase64(hex: string): string {
-  return Buffer.from(hex, 'hex').toString('base64');
+  return Buffer.from(hex, 'hex').toString('base64')
 }
 
-export class WithdrawStorage {
-  private tree: MerkleTree;
+export class BettingStorage {
+  public bcs = BCS.getInstance()
+  private tree: MerkleTree
 
-  constructor(txs: Array<WithdrawalTx>) {
-    const leaves = txs.map((tx) => {
-      const bridge_id_buf = Buffer.alloc(8);
-      bridge_id_buf.writeBigInt64BE(tx.bridge_id);
-
-      const sequence_buf = Buffer.alloc(8);
-      sequence_buf.writeBigInt64BE(tx.sequence);
-
-      const amount_buf = Buffer.alloc(8);
-      amount_buf.writeBigInt64BE(tx.amount);
-
+  constructor(bettings: Betting[]) {
+    const leaves = bettings.map((betting) => {
       return sha3_256(
         Buffer.concat([
-          bridge_id_buf,
-          sequence_buf,
-          Buffer.from(AccAddress.toHex(tx.sender).replace('0x', ''), 'hex'),
-          Buffer.from(AccAddress.toHex(tx.receiver).replace('0x', ''), 'hex'),
-          Buffer.from(tx.l1_denom, 'utf8'),
-          amount_buf
+          Buffer.from(this.bcs.serialize(BCS.ADDRESS, betting.address), 'base64'),
+          Buffer.from(this.bcs.serialize(BCS.U64, betting.gameId), 'base64'),
+          Buffer.from(this.bcs.serialize(BCS.U64, betting.position), 'base64'),
+          Buffer.from(this.bcs.serialize(BCS.U64, betting.eggs), 'base64'),
         ])
-      );
-    });
+      )
+    })
 
-    this.tree = new MerkleTree(leaves, sha3_256, { sort: true });
+    this.tree = new MerkleTree(leaves, sha3_256, { sort: true })
   }
 
   public getMerkleRoot(): string {
-    return convertHexToBase64(this.tree.getHexRoot().replace('0x', ''));
+    return convertHexToBase64(this.tree.getHexRoot().replace('0x', ''))
   }
 
-  public getMerkleProof(tx: WithdrawalTx): string[] {
-    const bridge_id_buf = Buffer.alloc(8);
-    bridge_id_buf.writeBigInt64BE(tx.bridge_id);
-
-    const sequence_buf = Buffer.alloc(8);
-    sequence_buf.writeBigInt64BE(tx.sequence);
-
-    const amount_buf = Buffer.alloc(8);
-    amount_buf.writeBigInt64BE(tx.amount);
-
+  public getMerkleProof(betting: Betting): string[] {
     return this.tree
       .getHexProof(
         sha3_256(
           Buffer.concat([
-            bridge_id_buf,
-            sequence_buf,
-            Buffer.from(AccAddress.toHex(tx.sender).replace('0x', ''), 'hex'),
-            Buffer.from(AccAddress.toHex(tx.receiver).replace('0x', ''), 'hex'),
-            Buffer.from(tx.l1_denom, 'utf8'),
-            amount_buf
+            Buffer.from(this.bcs.serialize(BCS.ADDRESS, betting.address), 'base64'),
+            Buffer.from(this.bcs.serialize(BCS.U64, betting.gameId), 'base64'),
+            Buffer.from(this.bcs.serialize(BCS.U64, betting.position), 'base64'),
+            Buffer.from(this.bcs.serialize(BCS.U64, betting.eggs), 'base64'),
           ])
         )
       )
-      .map((v) => convertHexToBase64(v.replace('0x', '')));
+      .map((v) => convertHexToBase64(v.replace('0x', '')))
   }
 
-  public verify(
-    proof: string[],
-    tx: {
-      bridge_id: bigint;
-      sequence: bigint;
-      sender: string;
-      receiver: string;
-      l1_denom: string;
-      amount: bigint;
-    }
-  ): boolean {
-    const bridge_id_buf = Buffer.alloc(8);
-    bridge_id_buf.writeBigInt64BE(tx.bridge_id);
-
-    const sequence_buf = Buffer.alloc(8);
-    sequence_buf.writeBigInt64BE(tx.sequence);
-
-    const amount_buf = Buffer.alloc(8);
-    amount_buf.writeBigInt64BE(tx.amount);
-
+  public verify(proof: string[], betting: Betting): boolean {
     let hashBuf = sha3_256(
       Buffer.concat([
-        bridge_id_buf,
-        sequence_buf,
-        Buffer.from(AccAddress.toHex(tx.sender).replace('0x', ''), 'hex'),
-        Buffer.from(AccAddress.toHex(tx.receiver).replace('0x', ''), 'hex'),
-        Buffer.from(tx.l1_denom, 'utf8'),
-        amount_buf
+        Buffer.from(this.bcs.serialize(BCS.ADDRESS, betting.address), 'base64'),
+        Buffer.from(this.bcs.serialize(BCS.U64, betting.gameId), 'base64'),
+        Buffer.from(this.bcs.serialize(BCS.U64, betting.position), 'base64'),
+        Buffer.from(this.bcs.serialize(BCS.U64, betting.eggs), 'base64'),
       ])
-    );
+    )
 
-    proof.forEach((proofElem) => {
-      const proofBuf = Buffer.from(proofElem, 'base64');
+    for (const proofElem of proof) {
+      const proofBuf = Buffer.from(proofElem, 'base64')
 
-      if (Buffer.compare(hashBuf, proofBuf) === -1) {
-        hashBuf = sha3_256(Buffer.concat([hashBuf, proofBuf]));
-      } else {
-        hashBuf = sha3_256(Buffer.concat([proofBuf, hashBuf]));
-      }
-    });
+      hashBuf =
+        Buffer.compare(hashBuf, proofBuf) === -1
+          ? sha3_256(Buffer.concat([hashBuf, proofBuf]))
+          : sha3_256(Buffer.concat([proofBuf, hashBuf]))
+    }
 
-    return this.getMerkleRoot() === hashBuf.toString('base64');
+    return this.getMerkleRoot() === hashBuf.toString('base64')
   }
 }

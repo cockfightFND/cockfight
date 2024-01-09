@@ -94,22 +94,22 @@ const routes = [
       {
         path: "my",
         children: [
-          // { index: true, element: <MyIndex /> },
-          // {
-          //   path: "wallet",
-          //   children: [
-          //     { index: true, element: <MyWallet /> },
-          //     { path: "settings", element: <MyWalletSettings /> },
-          //   ],
-          // },
-          // {
-          //   path: "account",
-          //   children: [
-          //     { path: "manage", element: <ManageAccounts /> },
-          //     { path: "create", children: [{ path: "mnemonic", element: <CreateAccountMnemonicForm /> }] },
-          //     { path: "social", element: <SocialLogin /> },
-          //   ],
-          // },
+          { index: true, element: <MyIndex /> },
+          {
+            path: "wallet",
+            children: [
+              { index: true, element: <MyWallet /> },
+              { path: "settings", element: <MyWalletSettings /> },
+            ],
+          },
+          {
+            path: "account",
+            children: [
+              { path: "manage", element: <ManageAccounts /> },
+              { path: "create", children: [{ path: "mnemonic", element: <CreateAccountMnemonicForm /> }] },
+              { path: "social", element: <SocialLogin /> },
+            ],
+          },
         ],
       },
       { path: "faucet", element: <MyWalletFaucet /> },

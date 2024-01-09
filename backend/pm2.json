@@ -1,34 +1,14 @@
 {
-    "apps" : [
-        {
-            "name" : "executor",
-            "cwd" : ".",
-            "script" : "npm run executor",
-            "watch" : true,
-            "autorestart" : true,
-            "args": [ "--color"]
-        },
-        {
-            "name" : "output",
-            "cwd" : ".",
-            "script" : "npm run output",
-            "watch" : true,
-            "autorestart" : true,
-            "restart_delay" : 10000
-        },
-        {
-            "name" : "batch",
-            "cwd" : ".",
-            "script" : "npm run batch",
-            "watch" : true,
-            "autorestart" : true
-        },
-        {
-            "name" : "challenger",
-            "cwd" : ".",
-            "script" : "npm run challenger",
-            "watch" : true,
-            "autorestart" : true
-        }
-    ]
+  "apps" : [
+      {
+          "name" : "vip-score-bot",
+          "cwd" : ".",
+          "script" : "npm run start",
+          "watch" : true,
+          "autorestart" : true,
+          "max_memory_restart": "1000M",
+          "max_restarts": 100,
+          "exp_backoff_restart_delay": 100
+      }
+  ]
 }

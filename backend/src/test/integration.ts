@@ -1,63 +1,38 @@
-import Bridge from './utils/Bridge';
-import { Config } from 'config';
-import { TxBot } from './utils/TxBot';
-import { Coin } from '@initia/initia.js';
-import { startBatch } from 'worker/batchSubmitter';
-import { startExecutor } from 'worker/bridgeExecutor';
-import { startOutput } from 'worker/outputSubmitter';
-import { delay } from 'bluebird';
-
-const config = Config.getConfig();
-const SUBMISSION_INTERVAL = 5;
-const FINALIZED_TIME = 5;
-const DEPOSIT_AMOUNT = 1_000_000;
-const DEPOSIT_INTERVAL_MS = 100;
+import  path from 'path'
+import { startBot } from 'main'
+import {
+  BettingEntity,
+  StateEntity,
+  getDB,
+  initORM,
+} from 'orm'
+import { publishL1Contracts } from './utils/PublishL1'
 
 async function setup() {
-  await setupBridge(SUBMISSION_INTERVAL, FINALIZED_TIME);
+  Promise.all([
+    await publishL1Contracts(path.join(__dirname, 'bin')),
+  ])
+  console.log('contracts published')
 }
 
-async function setupBridge(submissionInterval: number, finalizedTime: number) {
-  const bridge = new Bridge(submissionInterval, finalizedTime);
-  const relayerMetadata = '';
-  await bridge.deployBridge(relayerMetadata);
-  console.log('Bridge deployed');
-}
-
-async function startBot() {
-  try {
-    await Promise.all([
-      startBatch(),
-      startExecutor(),
-      startOutput()
-    ]);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-async function startDepositTxBot() {
-  const txBot = new TxBot(config.BRIDGE_ID);
-  for (;;) {
-    await txBot.deposit(
-      txBot.l1sender,
-      txBot.l2sender,
-      new Coin('uinit', DEPOSIT_AMOUNT)
-    );
-    await delay(DEPOSIT_INTERVAL_MS);
-  }
+async function setDB() {
+  const [db] = getDB()
+  
+  await db.getRepository(BettingEntity).clear()
+  await db.getRepository(StateEntity).clear()
 }
 
 async function main() {
   try {
-    await setup();
-    await startBot();
-    await startDepositTxBot();
+    await initORM()
+    await setup()
+    await setDB()
+    await startBot()
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
 }
 
 if (require.main === module) {
-  main();
+  main()
 }

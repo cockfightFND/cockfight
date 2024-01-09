@@ -33,7 +33,7 @@ const App = () => {
   const fixedBottomHeight = useRecoilValue(fixedBottomHeightState)
 
   const paddingBottom = navigationHeight + GLOBAL_PADDING + (fixedBottomHeight ? fixedBottomHeight + GLOBAL_PADDING : 0)
-
+  
   if (!games) return null
 
   return (
