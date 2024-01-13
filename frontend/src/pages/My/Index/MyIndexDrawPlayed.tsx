@@ -58,7 +58,7 @@ const MyIndexDrawPlayed = ({ query }: { query: UseInfiniteQueryResult<Paginated<
           key={pool.poolId}
           isPfp={pool.collection.isPfp}
           renderDetail={() => renderDetail(ticketBuys.length)}
-          renderCollapsed={() => renderCollapsed(ticketBuys, pool.prize, pool.collection.isPfp)}
+          renderCollapsed={() => renderCollapsed(ticketBuys, pool.initialWinPrizeAmount, pool.collection.isPfp)}
         />
       ))}
       <FetchNextPage {...query} />

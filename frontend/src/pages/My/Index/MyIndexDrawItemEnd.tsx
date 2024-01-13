@@ -17,7 +17,7 @@ interface Props extends Token {
 }
 
 const MyIndexDrawItemEnd = ({ name, imageUrl, backgroundColor, poolId, onFinish }: Props) => {
-  if (!poolId) throw new Error("Something went wrong")
+  if (typeof poolId !== "number") throw new Error("Something went wrong")
 
   /* context */
   const address = useAddress()

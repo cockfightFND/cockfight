@@ -9,6 +9,7 @@ import FetchNextPage from "../../../components/FetchNextPage"
 
 const MyIndexSellCanceled = ({ query }: { query: UseInfiniteQueryResult<Paginated<UserOrdersResponse>> }) => {
   const list = query.data?.pages.map((page) => page.data).flat()
+  const tokens = list?.map((d) => d.orders).flat()
 
   const renderDetail = () => (
     <Text fw={700} c="mono.5" tt="uppercase">
@@ -29,8 +30,8 @@ const MyIndexSellCanceled = ({ query }: { query: UseInfiniteQueryResult<Paginate
 
   return (
     <Stack>
-      {list?.map(({ orders }, index) => {
-        const [{ token, fixedPrice, updateAt }] = orders
+      {tokens?.map((order, index) => {
+        const { token, fixedPrice, updateAt } = order
         if (!token || !fixedPrice) return null
 
         return (

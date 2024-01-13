@@ -5,12 +5,12 @@ import { useMutation } from "@tanstack/react-query"
 import { Text } from "@mantine/core"
 import { modals } from "@mantine/modals"
 import axios from "axios"
-import { useAddress } from "../../../data/account"
-import { GLOBAL_PADDING, SUBMIT_MARGIN } from "../../../styles/variables"
-import ErrorModalContent from "../../../components/ErrorModalContent"
-import SubmitButton from "../../../components/SubmitButton"
-import BackButtonBar from "../../../components/BackButtonBar"
-import { FAUCET_SERVER_URL, INIT_DENOM, FAUCET_RECAPTCHA_SITEKEY } from "../../../data/constants"
+import { useAddress } from "../../data/account"
+import { GLOBAL_PADDING, SUBMIT_MARGIN } from "../../styles/variables"
+import ErrorModalContent from "../../components/ErrorModalContent"
+import SubmitButton from "../../components/SubmitButton"
+import BackButtonBar from "../../components/BackButtonBar"
+import { FAUCET_SERVER_URL, INIT_DENOM, FAUCET_RECAPTCHA_SITEKEY } from "../../data/constants"
 
 const MyWalletFaucet = () => {
   const navigate = useNavigate()

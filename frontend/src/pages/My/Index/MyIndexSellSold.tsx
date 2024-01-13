@@ -1,14 +1,28 @@
 import type { UseInfiniteQueryResult } from "@tanstack/react-query"
 import { Flex, Stack, Text } from "@mantine/core"
 import { formatAmount, truncate } from "@initia/utils"
-import type { UserOrdersResponse, Asset, Trade, Paginated } from "@initia/marketplace-api-types"
+import type { UserOrdersResponse, Asset, Trade, Token, Paginated } from "@initia/marketplace-api-types"
 import WithCollectionInfo from "../../../components/WithCollectionInfo"
 import Icon from "../../../styles/icons/Icon"
 import MyIndexItem from "./MyIndexItem"
 import FetchNextPage from "../../../components/FetchNextPage"
 
+interface MergedTrade extends Trade {
+  token?: Token
+}
+
 const MyIndexSellSold = ({ query }: { query: UseInfiniteQueryResult<Paginated<UserOrdersResponse>> }) => {
   const list = query.data?.pages.map((page) => page.data).flat()
+  const tokens = list
+    ?.map((d) => {
+      return d.orders
+        .map((o) => {
+          return o?.trades && o?.trades.length > 0 && o?.trades.map((t) => ({ ...t, token: o.token })).flat()
+        })
+        .flat()
+    })
+    .flat()
+    .filter((a) => !!a)
 
   const renderDetail = (asset: Asset) => (
     <Text fw={700} tt="uppercase">
@@ -16,7 +30,7 @@ const MyIndexSellSold = ({ query }: { query: UseInfiniteQueryResult<Paginated<Us
     </Text>
   )
 
-  const renderCollapsed = (trade: Trade) => (
+  const renderCollapsed = (trade: MergedTrade) => (
     <Stack spacing={2}>
       <Text c="mono.3" fz={12} fw={600}>
         To
@@ -35,10 +49,9 @@ const MyIndexSellSold = ({ query }: { query: UseInfiniteQueryResult<Paginated<Us
 
   return (
     <Stack>
-      {list?.map(({ orders }, index) => {
-        const [{ token, fixedPrice, trades }] = orders
-        if (!token || !fixedPrice || !trades?.length) return null
-        const [trade] = trades
+      {tokens?.map((trade, index) => {
+        const { price, token } = trade as MergedTrade
+        if (!trade || !token) return null
 
         return (
           <WithCollectionInfo collectionAddress={token.collectionAddress} key={index}>
@@ -49,7 +62,7 @@ const MyIndexSellSold = ({ query }: { query: UseInfiniteQueryResult<Paginated<Us
                 meta={collection?.name}
                 title={token.name ?? truncate(token.tokenAddress)}
                 isPfp={collection.isPfp}
-                renderDetail={() => renderDetail(fixedPrice)}
+                renderDetail={() => renderDetail(price)}
                 renderCollapsed={() => renderCollapsed(trade)}
               />
             )}

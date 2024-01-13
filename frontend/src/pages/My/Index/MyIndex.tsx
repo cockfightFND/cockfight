@@ -3,7 +3,8 @@ import PageTitle from "../../../components/PageTitle"
 import { useAddress } from "../../../data/account"
 import { GLOBAL_PADDING } from "../../../styles/variables"
 import MyIndexBalance from "./MyIndexBalance"
-import CreateAccount from "../../Inventory/Account/CreateAccount"
+import MyIndexTabs from "./MyIndexTabs"
+import CreateAccount from "../Account/CreateAccount"
 
 const MyIndex = () => {
   const address = useAddress()
@@ -16,6 +17,8 @@ const MyIndex = () => {
         <PageTitle>My Page</PageTitle>
         <MyIndexBalance />
       </Box>
+
+      {address && <MyIndexTabs />}
     </>
   )
 }

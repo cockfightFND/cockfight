@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 import { Group, Text, UnstyledButton } from "@mantine/core"
-import { GLOBAL_PADDING } from "../../../styles/variables"
-import Icon from "../../../styles/icons/Icon"
-import BackButtonBar from "../../../components/BackButtonBar"
+import { GLOBAL_PADDING } from "../../styles/variables"
+import Icon from "../../styles/icons/Icon"
+import BackButtonBar from "../../components/BackButtonBar"
 
 const menu = [
   { label: "Accounts", to: "/my/account/manage" },

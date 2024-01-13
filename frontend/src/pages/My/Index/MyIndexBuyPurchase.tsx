@@ -9,7 +9,11 @@ import FetchNextPage from "../../../components/FetchNextPage"
 
 const MyIndexBuyPurchase = ({ query }: { query: UseInfiniteQueryResult<Paginated<UserOrdersResponse>> }) => {
   const list = query.data?.pages.map((page) => page.data).flat()
-  const tokens = list?.map((d) => d.orders).flat()
+  const tokens = list
+    ?.map((d) => {
+      return d.orders.map((o) => ({ ...o, type: d.type }))
+    })
+    .flat()
 
   const renderDetail = (asset: Asset) => (
     <Text fw={700} tt="uppercase">
@@ -36,8 +40,9 @@ const MyIndexBuyPurchase = ({ query }: { query: UseInfiniteQueryResult<Paginated
 
   return (
     <Stack>
-      {tokens?.map(({ token, fixedPrice, seller, updateAt }, index) => {
+      {tokens?.map(({ type, token, fixedPrice, auctionInfo, seller, updateAt }, index) => {
         if (!token || !fixedPrice) return null
+        const asset = type === "execute_auction" && auctionInfo?.highestBid ? auctionInfo?.highestBid : fixedPrice
         return (
           <WithCollectionInfo collectionAddress={token.collectionAddress} key={index}>
             {(collection) => (
@@ -47,7 +52,7 @@ const MyIndexBuyPurchase = ({ query }: { query: UseInfiniteQueryResult<Paginated
                 meta={collection?.name}
                 title={token.name ?? truncate(token.tokenAddress)}
                 isPfp={collection.isPfp}
-                renderDetail={() => renderDetail(fixedPrice)}
+                renderDetail={() => renderDetail(asset)}
                 renderCollapsed={() => renderCollapsed(seller, updateAt)}
               />
             )}
