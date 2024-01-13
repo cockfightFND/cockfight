@@ -4,7 +4,7 @@ import CircleImage from "../../../components/CircleImage"
 import { ChickenImages, EggImages } from "../../Custom/items"
 import { CHICKEN_PRICE, EGG_PRICE } from "./calculate";
 
-const MainBox = ({ eggNum, chickenNum }) => {
+const MainBox = ({ eggNum, chickenNum }: { eggNum: number, chickenNum: number }) => {
   return (
     <>
         <Box

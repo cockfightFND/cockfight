@@ -31,7 +31,7 @@ const MyWalletFaucet = () => {
         title: "Success",
         children: (
           <>
-            <Text>100 INIT has been sent to your wallet</Text>
+            <Text>100 USDT has been sent to your wallet</Text>
             <SubmitButton mt={SUBMIT_MARGIN} onClick={() => modals.closeAll()}>
               Ok
             </SubmitButton>

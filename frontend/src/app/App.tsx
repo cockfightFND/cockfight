@@ -15,7 +15,7 @@ import { useAddress } from "../data/account"
 import { GLOBAL_PADDING } from "../styles/variables"
 import ScrollToTop from "../components/ScrollToTop"
 import Container from "../components/Container"
-import { backgroundColorState, fixedBottomHeightState, navigationBarHeightState, showNavigationBarState } from "./hooks"
+import { backgroundColorState, fixedBottomHeightState, isBuyState, navigationBarHeightState, showNavigationBarState } from "./hooks"
 import Navigation from "./Navigation"
 
 const App = () => {

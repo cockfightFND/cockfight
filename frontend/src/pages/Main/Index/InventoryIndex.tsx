@@ -1,8 +1,10 @@
 import { Stack } from "@mantine/core"
 import PageTitle from "../../../components/PageTitle"
 import MainBox from "../Custom/MainBox"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EGG_INFLATION } from "../Custom/calculate";
+import { isBuyState } from "../../../app/hooks";
+import { useRecoilValue } from "recoil";
 
 const InventoryIndex = () => {
   const initialGlobalChicken = parseInt(localStorage.getItem('global_chicken') || '10000000');
@@ -15,17 +17,21 @@ const InventoryIndex = () => {
   const [globalEgg, setGlobalEgg] = useState(initialGlobalEgg);
   const [myChicken, setMyChicken] = useState(initialMyChicken);
   const [myEgg, setMyEgg] = useState(initialMyEgg);
-  
+  const isBuy = useRecoilValue(isBuyState);
+
+
   // 치킨 값이 1초마다 변경
   useEffect(() => {
-      const interval = setInterval(() => {
+    const interval = setInterval(() => {
+
       const randomChickenIncrement = Math.floor(Math.random() * 10) + 1;
+      
       setGlobalChicken(prevValue => {
         const newValue = prevValue + randomChickenIncrement;
         localStorage.setItem('global_chicken', newValue.toString()); 
         return newValue;
       });
-
+  
       setMyChicken(prevValue => {
         const newValue = prevValue;
         localStorage.setItem('my_chicken', newValue.toString()); 
@@ -33,30 +39,34 @@ const InventoryIndex = () => {
       })
       
       setGlobalEgg(prevValue => {
-        const eggIncrement = EGG_INFLATION * globalChicken
+        const eggIncrement = EGG_INFLATION * globalChicken;
         const newValue = prevValue + eggIncrement;
         localStorage.setItem('global_egg', newValue.toString());
         return newValue;
       })
-
+  
       setMyEgg(prevValue => {
-        const eggIncrement = EGG_INFLATION * myChicken
+        const eggIncrement = EGG_INFLATION * myChicken;
         const newValue = prevValue + eggIncrement;
         localStorage.setItem('my_egg', newValue.toString());
         return newValue;
       })
-
-      }, 5000);
-      return () => clearInterval(interval);
-  }, []);
+      console.log('main buy:', isBuy)
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, [globalChicken, myChicken, isBuy]);
 
   return (
     <>
       <Stack spacing={24}>
         <PageTitle>Global Pool</PageTitle>
         <MainBox chickenNum={globalChicken} eggNum={globalEgg}/>
-        <PageTitle>My Pool</PageTitle>
-        <MainBox chickenNum={myChicken} eggNum={myEgg}/>
+
+        <>
+          <PageTitle>My Pool</PageTitle>
+          <MainBox chickenNum={myChicken + 1} eggNum={myEgg}/>
+        </>
       </Stack>
     </>
   )

@@ -24,6 +24,9 @@ import InventoryIndex from "./pages/Main/Index/InventoryIndex"
 import DrawIndex from "./pages/Fight/Index/DrawIndex"
 import DrawGameDetails from "./pages/Fight/Game/DrawGameDetails"
 import DrawPoolEntry from "./pages/Fight/Pool/DrawPoolEntry"
+import { createContext } from "@initia/react-api"
+
+export const [useMarket, MarketProvider] = createContext("buy")
 
 const routes = [
   {

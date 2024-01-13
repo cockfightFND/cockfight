@@ -9,8 +9,8 @@ const router = createBrowserRouter(routes)
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <RecoilRoot>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+      </QueryClientProvider>
   </RecoilRoot>,
 )

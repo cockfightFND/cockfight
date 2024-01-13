@@ -25,6 +25,11 @@ export const fixedBottomHeightState = atom({
   default: 0,
 })
 
+export const isBuyState = atom({
+  key: "isBuy",
+  default: false,
+})
+
 export const showNavigationBarState = atom({
   key: "showNavigationBar",
   default: true,

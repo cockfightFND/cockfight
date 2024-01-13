@@ -9,3 +9,5 @@ interface Props {
 }
 
 export const [useDrawPoolEntry, DrawPoolEntryProvider] = createContext<Props>("DrawPoolEntry")
+
+export const [useBuy, BuyProvider] = createContext("BuyEntry")
