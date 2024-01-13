@@ -21,6 +21,9 @@ import ManageAccounts from "./pages/My/Account/ManageAccounts"
 import CreateAccountMnemonicForm from "./pages/My/Account/CreateAccountMnemonicForm"
 import SocialLogin from "./pages/My/Account/SocialLogin"
 import InventoryIndex from "./pages/Main/Index/InventoryIndex"
+import DrawIndex from "./pages/Fight/Index/DrawIndex"
+import DrawGameDetails from "./pages/Fight/Game/DrawGameDetails"
+import DrawPoolEntry from "./pages/Fight/Pool/DrawPoolEntry"
 
 const routes = [
   {
@@ -36,6 +39,10 @@ const routes = [
       },
       {
         path: "draw",
+        children: [
+          { index: true, element: <DrawIndex /> },
+          { path: "pool/:id", element: <DrawPoolEntry /> },
+        ],
       },
       {
         path: "market",

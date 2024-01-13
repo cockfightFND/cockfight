@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
 import { Box, Button, Stack, Text, Title, UnstyledButton } from "@mantine/core"
-import { ReactComponent as Logo } from "../../../styles/INIT.svg"
 import FixedBottom from "../../../components/FixedBottom"
 
 const CreateAccount = () => {
@@ -8,18 +7,6 @@ const CreateAccount = () => {
 
   return (
     <>
-      <Stack spacing={12} mt={140}>
-        <Logo width={68} height={68} />
-        <Box>
-          <Title fz={42} fw={900}>
-            Initia
-          </Title>
-          <Text fz={14} fw={600}>
-            Create Initia account to begin trading NFTs
-          </Text>
-        </Box>
-      </Stack>
-
       <FixedBottom>
         <Stack spacing={8}>
           {[{ label: "Google" }, { label: "Twitter" }, { label: "Facebook" }].map(({ label }) => (
