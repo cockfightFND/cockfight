@@ -18,7 +18,7 @@ const MyIndex = () => {
         <MyIndexBalance />
       </Box>
 
-      {address && <MyIndexTabs />}
+      {/* {address && <MyIndexTabs />} */}
     </>
   )
 }

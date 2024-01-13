@@ -2,7 +2,8 @@ import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from "@web3auth/base"
 import { Web3AuthNoModal } from "@web3auth/no-modal"
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter"
 import { CommonPrivateKeyProvider } from "@web3auth/base-provider"
-import { WEB3AUTH_KEY, RPC_URL } from "../../../data/constants"
+import { WEB3AUTH_KEY, WEB3AUTH_SECRET, RPC_URL } from "../../../data/constants"
+import { whitelistUrl } from "@toruslabs/openlogin"
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.OTHER,
@@ -21,13 +22,18 @@ export async function requestUserInfo(loginProvider: string) {
     web3AuthNetwork: "testnet",
   })
 
-  const privateKeyProvider = new CommonPrivateKeyProvider({ config: { chainConfig } })
+  const origin = "https://chicken-and-eggs.vercel.app"
 
+  const privateKeyProvider = new CommonPrivateKeyProvider({ config: { chainConfig } })
+  const sig = await whitelistUrl(WEB3AUTH_KEY, WEB3AUTH_SECRET, origin)
   const adapter = new OpenloginAdapter({
     loginSettings: {
       mfaLevel: "none",
     },
     privateKeyProvider,
+    adapterSettings: {
+      originData: { [origin]: sig}
+    }
   })
 
   web3auth.configureAdapter(adapter)

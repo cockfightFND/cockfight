@@ -29,7 +29,7 @@ const MyIndexBalance = () => {
       <Link to="./wallet/settings">
         <Group position="right" spacing={3} c="mono.6">
           <Text c="mono.1" fz={30}>
-            {formatAmount(balance)} INIT
+            {formatAmount(balance)} USDT
           </Text>
           <Icon.ChevronRight width={24} height={24} />
         </Group>

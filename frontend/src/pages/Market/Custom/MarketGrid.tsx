@@ -25,7 +25,7 @@ const MarketGrid = () => {
             </Grid.Col>
             ))
         }
-        {
+        {/* {
             Eggs.map((egg) => (
                 <Grid.Col span={4}>
                     <Card shadow="sm" padding="lg">
@@ -34,13 +34,13 @@ const MarketGrid = () => {
                         </Card.Section>
                         <div style={{ textAlign: 'center' }}>
                             <Text weight={500} size="lg" mt="md">
-                                {egg.price} LINK
+                                {egg.price} USDT
                             </Text>
                         </div>
                     </Card>
                 </Grid.Col>
             ))
-        }
+        } */}
         </Grid>
     );
 };

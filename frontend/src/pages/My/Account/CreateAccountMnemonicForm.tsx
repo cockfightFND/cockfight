@@ -8,7 +8,8 @@ import Caution from "../../../components/Caution"
 const CreateAccountMnemonicForm = () => {
   const navigate = useNavigate()
   const { create } = useManageAccount()
-  const { register, handleSubmit, formState } = useForm<{ mnemonic: string }>({ defaultValues: { mnemonic: "" } })
+  const { register, handleSubmit, formState } = useForm<{ mnemonic: string }>({ defaultValues: 
+    { mnemonic: "harvest end grab embark oxygen rifle divorce purchase marble member expire zone vintage panic rich average siege tennis page mixed drip eight mistake make" } })
 
   const submit = handleSubmit(async ({ mnemonic }) => {
     await create({ type: "mnemonic", address: "", mnemonic, index: 0 })
