@@ -11,9 +11,9 @@ import { ReactComponent as MyIcon } from "./icons/My.svg"
 import { navigationBarHeightState } from "./hooks"
 
 const navs = [
-  { to: "/inventory", label: "Main", /*icon: <InventoryIcon width={24} height={24} /> */},
-  { to: "/draw", label: "Fight", /*icon: <DrawIcon width={24} height={24} />*/ },
+  { to: "/main", label: "Main", /*icon: <InventoryIcon width={24} height={24} /> */},
   { to: "/market", label: "Market", /* icon: <MarketIcon width={24} height={24} /> */},
+  { to: "/dashboard", label: "Dashboard", /*icon: <DrawIcon width={24} height={24} />*/ },
   { to: "/my", label: "My Page", /*icon: <MyIcon width={24} height={24} /> */},
 ]
 
