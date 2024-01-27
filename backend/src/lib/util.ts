@@ -1,5 +1,7 @@
 import { SHA3 } from 'sha3'
 import { random } from 'lodash'
+import { INIT_ACCOUNT_REGEX } from './constants'
+import { AccAddress } from '@initia/initia.js'
 
 export function sha3_256(value: Buffer | string | number) {
   value = toBuffer(value)
@@ -100,4 +102,16 @@ export function stripQuotes(str: string): string {
 export function convertBigintStringToNumber(str: string): number {
   const res = Number(BigInt(str))
   return res
+}
+
+export function toHex(account: string): string {
+  if (!INIT_ACCOUNT_REGEX.test(account)) {
+    throw new Error('Invalid account format: ' + account)
+  }
+
+  const hexAccount = account.startsWith('init1')
+    ? AccAddress.toHex(account)
+    : account
+
+  return '0x' + hexAccount.substring(2).replace(/^0+/, '')
 }

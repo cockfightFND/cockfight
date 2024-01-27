@@ -1,8 +1,8 @@
 import { Box, Flex, Group, Text } from "@mantine/core"
 import { Link } from "react-router-dom"
-import CircleImage from "../../../components/CircleImage"
-import { ChickenImages, EggImages } from "../../Custom/items"
-import { CHICKEN_PRICE, EGG_PRICE } from "./calculate";
+import CircleImage from "../../components/CircleImage"
+import { ChickenImages, EggImages } from "../Custom/items"
+import { CHICKEN_PRICE, EGG_PRICE } from "./Custom/calculate";
 
 const MainBox = ({ eggNum, chickenNum }: { eggNum: number, chickenNum: number }) => {
   return (

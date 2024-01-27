@@ -1,49 +1,70 @@
-import { BettingEntity, StateEntity, getDB } from 'orm'
-import { config } from 'config'
+import { BettingEntity, GameEntity, getDB } from 'orm'
 import { operator, setMerkleRoot } from 'lib/wallet'
 import { Betting } from 'types'
 import { BettingStorage } from 'lib/storage'
+import { APIError, ErrorTypes } from 'lib/error'
 
-export interface PostSubmissionParam {
+export interface PostGameParam {
   game_id: number
-  winner_position: number
+  position_num : number
+  prize_amount: number
 }
 
-export async function postSubmission(req: PostSubmissionParam) {
+export async function postGame(param: PostGameParam) {
   const [db] = getDB()
   const queryRunner = db.createQueryRunner('slave')
 
   try {
-    const state =await queryRunner
+    const gameId = Number(param.game_id)
+    const game =await queryRunner
       .manager
-      .getRepository(StateEntity)
+      .getRepository(GameEntity)
       .findOne({
         where: {
-          name: 'state',
+          gameId
         },
       })
-    
-    if (!state) {
-      await queryRunner.manager.getRepository(StateEntity).save({
-        name: 'state',
-        gameId: req.game_id,
-        prizeAmount: config.PRIZE_AMOUNT,
-      })
-      return
-    } else {
-      await queryRunner.manager.getRepository(StateEntity).save({
-        name: 'state',
-        gameId: req.game_id + 1,
-        prizeAmount: config.PRIZE_AMOUNT,
-      })
-    }
 
+    if (game) throw new APIError(ErrorTypes.INVALID_REQUEST_ERROR, 'game already exists')
+    await queryRunner.manager.getRepository(GameEntity).save({
+      gameId,
+      positionNum: param.position_num,
+      prizeAmount: param.prize_amount,
+    })
+
+  } finally {
+    await queryRunner.release()
+  }
+}
+
+
+export interface PostGameResultParam {
+  game_id: number
+  winner_position: number
+}
+
+export async function postGameResult(param: PostGameResultParam) {
+  const [db] = getDB()
+  const queryRunner = db.createQueryRunner('slave')
+
+  try {
+    const gameId = Number(param.game_id)
+    const game =await queryRunner
+      .manager
+      .getRepository(GameEntity)
+      .findOne({
+        where: {
+          gameId
+        },
+      })
+
+    if (!game) throw new APIError(ErrorTypes.INVALID_REQUEST_ERROR, 'game not exists')
     
     const bettingQb = await queryRunner
       .manager
       .createQueryBuilder(BettingEntity,'betting')
       .where('betting.game_id = :gameId', {
-        gameId: state.gameId,
+        gameId: game.gameId,
       })
       .getMany()
     
@@ -75,9 +96,9 @@ export async function postSubmission(req: PostSubmissionParam) {
     
     await operator.transaction([
       setMerkleRoot(
-        state.gameId,
-        state.prizeAmount,
-        req.winner_position,
+        game.gameId,
+        game.prizeAmount,
+        Number(param.winner_position),
         bettingMerkleRoot,
       )
     ])

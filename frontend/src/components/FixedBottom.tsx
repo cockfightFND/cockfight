@@ -11,7 +11,7 @@ const FixedBottom = (props: PropsWithChildren<BoxProps>) => {
   const navigationBarHeight = useRecoilValue(navigationBarHeightState)
   const { ref, height } = useElementSize()
   const setFixedBottomHeight = useSetRecoilState(fixedBottomHeightState)
-
+  
   useEffect(() => {
     setFixedBottomHeight(height)
     return () => setFixedBottomHeight(0)

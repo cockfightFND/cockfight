@@ -1,5 +1,5 @@
 import { Title } from "@mantine/core"
-import GameIndexCarousel from "../Custom/GameIndexCarousel"
+import GameIndexCarousel from "./GameIndexCarousel"
 
 const DrawIndex = () => {
   return (

@@ -8,18 +8,18 @@ import debugModule from 'debug'
 const debug = debugModule('orm')
 
 import { BettingEntity } from './BettingEntity'
-import { StateEntity } from './StateEntity'
+import { GameEntity } from './GameEntity'
 
 
 export * from './BettingEntity'
-export * from './StateEntity'
+export * from './GameEntity'
 
 export const staticOptions = {
   supportBigNumbers: true,
   bigNumberStrings: true,
   entities: [
     BettingEntity,
-    StateEntity,
+    GameEntity,
   ],
 }
 

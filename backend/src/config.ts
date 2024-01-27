@@ -9,7 +9,7 @@ const {
   L1_RPC_URI,
   OPERATOR_MNEMONIC,
   PRIZE_AMOUNT,
-  USE_LOG_FILE
+  USE_LOG_FILE,
 } = process.env
 
 export const config = {
@@ -27,4 +27,3 @@ export const config = {
   ),
   USE_LOG_FILE: USE_LOG_FILE === 'true' ? true : false,
 }
-

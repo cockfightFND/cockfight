@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Egg, TestChickens, TestEgg } from "../../Custom/items";
 import { Grid, Card, Image, Text } from '@mantine/core';
 import Modal from './MarketModal'; 
@@ -21,6 +21,11 @@ const MarketGrid = () => {
         console.log('buy:', isBuyState)
         setShowModal(false);
     };
+
+    // useEffect(() => {
+    //     setIsBuyState(height)
+    //     return () => setIsBuyState(0)
+    //   }, [setIsBuyState])
 
     return (
         <>

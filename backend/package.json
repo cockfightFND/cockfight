@@ -27,6 +27,7 @@
     "chalk": "^2.4.2",
     "docker-compose": "^0.24.3",
     "dotenv": "^16.3.1",
+    "firebase": "^10.7.2",
     "koa": "^2.15.0",
     "koa-body": "^4.2.0",
     "koa-helmet": "^7.0.2",

@@ -51,9 +51,8 @@ const InventoryIndex = () => {
         localStorage.setItem('my_egg', newValue.toString());
         return newValue;
       })
-      console.log('main buy:', isBuy)
     }, 3000);
-    
+    console.log('main buy:', isBuy)
     return () => clearInterval(interval);
   }, [globalChicken, myChicken, isBuy]);
 
