@@ -9,10 +9,13 @@ const debug = debugModule('orm')
 
 import { BettingEntity } from './BettingEntity'
 import { GameEntity } from './GameEntity'
-
+import { MarketEntity } from './MarketEntity'
+import { DashboardEntity } from './DashboardEntity'
 
 export * from './BettingEntity'
 export * from './GameEntity'
+export * from './MarketEntity'
+export * from './DashboardEntity'
 
 export const staticOptions = {
   supportBigNumbers: true,
@@ -20,6 +23,8 @@ export const staticOptions = {
   entities: [
     BettingEntity,
     GameEntity,
+    MarketEntity,
+    DashboardEntity,
   ],
 }
 

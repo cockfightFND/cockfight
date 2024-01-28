@@ -2,19 +2,14 @@ import { config } from 'config'
 import {
   MnemonicKey,
   Wallet,
-  MsgExecute,
-  BCS,
   Msg,
   LCDClient,
   Key,
   Coins,
   WaitTxBroadcastResult,
-  AccAddress,
 } from '@initia/initia.js'
 import { sendTx } from './tx'
 import { buildNotEnoughBalanceNotification, notifySlack } from './slack'
-
-const bcs = BCS.getInstance()
 
 export class TxWallet extends Wallet {
   private managedAccountNumber
@@ -66,29 +61,9 @@ export class TxWallet extends Wallet {
   }
 }
 
-export const operator = new TxWallet(
+export const contract = new TxWallet(
   config.l1lcd,
-  new MnemonicKey({ mnemonic: config.OPERATOR_MNEMONIC })
+  new MnemonicKey({
+    mnemonic: config.CONTRACT_MNEMONIC,
+  })
 )
-
-export function setMerkleRoot(
-  gameId: number,
-  prizeAmount: number,
-  winnerPosition: number,
-  merkleRoot: string
-): MsgExecute {
-  const msg = new MsgExecute(
-    operator.key.accAddress,
-    AccAddress.toHex(operator.key.accAddress),
-    'cockfight',
-    'set_merkle_root',
-    [],
-    [
-      bcs.serialize(BCS.U64, gameId),
-      bcs.serialize(BCS.U64, prizeAmount),
-      bcs.serialize(BCS.U64, winnerPosition),
-      bcs.serialize('vector<u8>', Buffer.from(merkleRoot, 'base64')),
-    ]
-  )
-  return msg
-}
