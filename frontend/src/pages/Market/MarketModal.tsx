@@ -1,27 +1,41 @@
 import React from 'react';
+import { Modal, Button, Text, Group } from '@mantine/core';
 
-const MarketModal = ({ onClose }) => {
+const MarketModal = ({ onClose }: {onClose: any}) => {
   return (
-    <div style={{
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: 'white',
-      padding: '20px',
-      zIndex: 1000,
-      borderRadius: '10px',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-      maxWidth: '400px',
-      width: '100%',
-      textAlign: 'center'
-    }}>
-      <p style={{ fontSize: '18px', fontWeight: '500', marginBottom: '20px' }}>Would you buy this one?</p>
-      <div>
-        <button onClick={() => onClose(true)} style={{ marginRight: '10px', padding: '10px 20px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Yes</button>
-        <button onClick={() => onClose(false)} style={{ padding: '10px 20px', backgroundColor: '#f44336', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>No</button>
-      </div>
-    </div>
+    <Modal
+      opened={true}
+      onClose={() => onClose(false)}
+      title="Chicken Details"
+      centered
+      styles={(theme) => ({
+        modal: {
+          width: '90%', // Sets the width relative to the parent
+          maxWidth: '400px', // Ensures the modal is not too wide on larger screens
+        },
+        title: {
+          fontSize: '24px',
+          fontWeight: 600,
+          textAlign: 'center',
+          color: theme.colors.blue[6],
+        },
+        body: {
+          paddingTop: theme.spacing.md,
+          paddingBottom: theme.spacing.md,
+        },
+      })}
+    >
+      <Text size="md" style={{ marginBottom: '20px', fontWeight: 500 }}>Would you buy this one?</Text>
+      
+      <Text size="sm" style={{ marginBottom: '10px' }}>Buy Price: 1000USDT</Text>
+      <Text size="sm" style={{ marginBottom: '10px' }}>Sell Price: 1000USDT</Text>
+      <Text size="sm" style={{ marginBottom: '20px' }}>Egg Production: 1000 eggs</Text>
+
+      <Group position="center" spacing="md">
+        <Button color="green" onClick={() => onClose(true)}>Yes</Button>
+        <Button color="red" onClick={() => onClose(false)}>No</Button>
+      </Group>
+    </Modal>
   );
 };
 

@@ -5,13 +5,11 @@ import { Link } from "react-router-dom"
 import { formatAmount, formatPercent } from "@initia/utils"
 import type { StackedCarouselSlideProps } from "react-stacked-center-carousel"
 import { StackedCarousel, ResponsiveContainer } from "react-stacked-center-carousel"
-import { useAPI } from "../../../data/api"
-import Icon from "../../../styles/icons/Icon"
-import DefaultButton from "../../../components/DefaultButton"
-import ErrorMessage from "../../../components/ErrorMessage"
-import { CockFight, TestCockFights } from "../../Custom/items"
+// import { useAPI } from "../../../data/api"
+import DefaultButton from "../../components/DefaultButton"
+import { CockFight, TestCockFights } from "../Custom/items"
  
-const GameIndexCarousel = () => {
+const GameCarousel = () => {
   const containerRef = useRef<StackedCarousel | undefined>()
 
   const data = TestCockFights;
@@ -21,11 +19,13 @@ const GameIndexCarousel = () => {
       sx={{
         position: "relative",
         margin: "0 -16px",
-        minHeight: 486,
         width: "calc(100% + 32px)",
-        ".react-stacked-center-carousel-slide-0": {
-          boxShadow: "0px 0px 30px 30px #00000090",
+        backgroundColor: "transparent", // Set background color to match parent
+        transition: "box-shadow 0.3s ease-in-out", // Keep the transition for any other style changes
+        '&:hover': {
+          boxShadow: "none", // Remove shadow on hover
         },
+        // If there are any other specific styles for the parent's background, set them here
       }}
     >
       <ResponsiveContainer
@@ -35,7 +35,7 @@ const GameIndexCarousel = () => {
             ref={carouselRef}
             data={data}
             carouselWidth={parentWidth}
-            slideWidth={parentWidth - 50}
+            slideWidth={parentWidth - 150}
             slideComponent={Slide}
             maxVisibleSlide={maxVisibleCarousel(data.length)}
             useGrabCursor={true}
@@ -46,7 +46,7 @@ const GameIndexCarousel = () => {
   )
 }
 
-export default GameIndexCarousel
+export default GameCarousel
 
 const Slide = memo((props: StackedCarouselSlideProps) => {
   const navigate = useNavigate()
@@ -58,14 +58,21 @@ const Slide = memo((props: StackedCarouselSlideProps) => {
   return (
     <Stack
       w={"100%"}
-      spacing={12}
+      spacing={5}
       c="black"
       bg={"mono.1"}
       p={28}
-      sx={{ borderRadius: 20 }}
+      sx={{ 
+        borderRadius: 20,
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)', // Adjusted shadow effect
+        overflow: 'hidden', // Ensure the content does not overflow
+      }}
       pos="relative"
     >
-      <Image src={fight.image} height={240} />
+      <Text size={"smaller"} sx={{ textAlign: 'right' }}> {/* Right aligned text */}
+        X{fight.ticket} 
+      </Text>
+      <Image src={fight.image} height={200}/>
       
       <Stack spacing={0} align="center" sx={{ flex: "none" }}>
         <Text fz={18}>{fight.name}</Text>
@@ -79,19 +86,7 @@ const Slide = memo((props: StackedCarouselSlideProps) => {
         >
           Fight!
         </DefaultButton>
-
-        <Text fz={20} fw={800} mt={20}>
-        <Text fz={16} span>
-            Prize: {fight.ticket} Chicken
-          </Text>
-        </Text>
       </Stack>
-
-      <Group spacing={4} pos="absolute" top={24} right={20}>
-        <Text fz={12} fw={800}>
-          Ticket: {fight.ticket} Eggs
-        </Text>
-      </Group>
     </Stack>
   )
 })

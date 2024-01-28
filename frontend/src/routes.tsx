@@ -1,15 +1,17 @@
 import { redirect } from "react-router-dom"
 import App from "./app/App"
 
-/* draw */
-/* market */
-// import MarketIndex from "./pages/Market/Index/MarketIndex"
-// import MarketGameDetails from "./pages/Market/Game/MarketGameDetails"
-// import MarketItemDetails from "./pages/Market/Item/MarketItemDetails"
+/* main */
+import MainIndex from "./pages/Main/MainIndex"
 
-/* inventory */
+/* market */
+import MarketIndex from "./pages/Market/MarketIndex"
+
+/* dashboard */
+import DashboardIndex from "./pages/Dashboard/DashboardIndex"
+
 /* my */
-// import MyIndex from "./pages/My/Index/MyIndex"
+import MyIndex from "./pages/My/MyIndex"
 import MyWallet from "./pages/My/MyWallet"
 import MyWalletSettings from "./pages/My/MyWalletSettings"
 
@@ -20,13 +22,7 @@ import MyWalletFaucet from "./pages/My/MyWalletFaucet"
 import ManageAccounts from "./pages/My/Account/ManageAccounts"
 import CreateAccountMnemonicForm from "./pages/My/Account/CreateAccountMnemonicForm"
 import SocialLogin from "./pages/My/Account/SocialLogin"
-// import InventoryIndex from "./pages/Main/Index/InventoryIndex"
-import DrawIndex from "./pages/Fight/DrawIndex"
-import MainIndex from "./pages/Main/MainIndex"
-import DashboardIndex from "./pages/Dashboard/DashboardIndex"
-import MarketIndex from "./pages/Market/MarketIndex"
-// import DrawGameDetails from "./pages/Fight/Game/DrawGameDetails"
-// import DrawPoolEntry from "./pages/Fight/Pool/DrawPoolEntry"
+
 
 const routes = [
   {
@@ -55,7 +51,7 @@ const routes = [
       {
         path: "my",
         children: [
-          // { index: true, element: <MyIndex /> },
+          { index: true, element: <MyIndex /> },
           {
             path: "wallet",
             children: [
