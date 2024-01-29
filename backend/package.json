@@ -1,5 +1,5 @@
 {
-  "name": "chicken-and-eggs",
+  "name": "cockfight",
   "version": "1.0.0",
   "repository": {
     "type": "git",
@@ -13,7 +13,6 @@
     "test": "jest",
     "test:integration": "export DEV_MODE=test && ts-node -r tsconfig-paths/register ./src/test/integration.ts",
     "test:claim": "export DEV_MODE=test && ts-node -r tsconfig-paths/register ./src/test/claim.ts",
-    "prepare": "husky install",
     "format": "prettier --check \"./src/**/*.ts\"",
     "format:fix": "prettier --write \"./src/**/*.ts\"",
     "lint": "eslint src --ext .js,.ts",
@@ -27,7 +26,6 @@
     "chalk": "^2.4.2",
     "docker-compose": "^0.24.3",
     "dotenv": "^16.3.1",
-    "firebase": "^10.7.2",
     "koa": "^2.15.0",
     "koa-body": "^4.2.0",
     "koa-helmet": "^7.0.2",
