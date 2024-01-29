@@ -23,7 +23,7 @@ export const config = {
     L1_LCD_URI ? L1_LCD_URI.split(',')[0] : 'https://lcd.stone-13.initia.xyz',
     {
       gasPrices: '0.15uinit',
-      gasAdjustment: '100000',
+      gasAdjustment: '1.75',
     }
   ),
   USE_LOG_FILE: USE_LOG_FILE === 'true' ? true : false,

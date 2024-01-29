@@ -8,19 +8,25 @@
     "lint": "eslint src",
     "postinstall": "simple-git-hooks"
   },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
-    "@cosmjs/amino": "^0.31.1",
-    "@cosmjs/crypto": "^0.31.1",
-    "@cosmjs/proto-signing": "^0.31.1",
-    "@cosmjs/stargate": "^0.31.1",
-    "@cosmjs/tendermint-rpc": "^0.31.1",
-    "@cosmjs/utils": "^0.31.1",
-    "@initia/initia.proto": "^0.1.12",
-    "@initia/query": "^0.7.0",
-    "@initia/react-api": "^0.1.0",
-    "@initia/shared": "^0.6.0",
-    "@initia/use-essentials": "^0.47.0",
-    "@initia/utils": "^0.3.0",
+    "@cosmjs/amino": "^0.32.2",
+    "@cosmjs/crypto": "^0.32.2",
+    "@cosmjs/proto-signing": "^0.32.2",
+    "@cosmjs/stargate": "^0.32.2",
+    "@cosmjs/tendermint-rpc": "^0.32.2",
+    "@cosmjs/utils": "^0.32.2",
+    "@initia/initia.js": "^0.1.28",
+    "@initia/initia.proto": "^0.1.23",
+    "@initia/query": "^0.8.0",
+    "@initia/react-api": "^0.2.0",
+    "@initia/react-components": "^0.6.0",
+    "@initia/shared": "^0.9.0",
+    "@initia/use-essentials": "^0.53.0",
+    "@initia/utils": "^0.4.0",
     "@mantine/carousel": "^6.0.20",
     "@mantine/core": "^6.0.20",
     "@mantine/dates": "^6.0.20",
@@ -54,7 +60,8 @@
     "react-intersection-observer": "^9.5.2",
     "react-router-dom": "^6.15.0",
     "react-stacked-center-carousel": "^1.0.12",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "sha3": "^2.1.4"
   },
   "devDependencies": {
     "@initia/marketplace-api-types": "^1.1.1",

@@ -14,6 +14,9 @@ export async function sendTx(
     sequence,
   })
   const broadcastResult = await wallet.lcd.tx.broadcast(signedTx, timeout)
+  console.log(wallet.lcd.URL)
+  console.log(wallet.key.accAddress)
+  console.log(broadcastResult)
   if (broadcastResult['code']) throw new Error(broadcastResult.raw_log)
   return broadcastResult
 }

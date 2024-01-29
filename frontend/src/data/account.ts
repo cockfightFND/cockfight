@@ -12,6 +12,7 @@ import { Tendermint37Client } from "@cosmjs/tendermint-rpc"
 import { useInitiaEssentials, useAllBalances } from "@initia/use-essentials"
 import { createDefaultRegistry } from "@initia/shared"
 import { GAS_PRICE, INIT_DENOM, RPC_URL } from "./constants"
+import BigNumber from "bignumber.js"
 
 type Account = MnemonicAccount | PrivateKeyAccount
 const stargateClient = await StargateClient.connect(RPC_URL)
@@ -161,13 +162,21 @@ export function useSignAndBroadcastTxSync() {
     if (!account) throw new Error("Account not found")
     const { address } = account
     const wallet = await getWallet(account)
-
     if (!tmClient) throw new Error("Tendermint client not found")
     if (!chainId) throw new Error("Chain ID not found")
     if (!accountData) throw new Error("Account number and sequence not found")
 
     const signer = await SigningStargateClient.createWithSigner(tmClient, wallet, clientOptions)
-    const fee = { amount: [{ denom: "umin", amount: "0" }], gas: String(gas) }
+    const fee = {
+      amount: [
+        {
+          denom: "uinit",
+          amount: BigNumber("0.15").times(gas).toString(),
+        },
+      ],
+      gas: String(gas),
+    }
+  
     const explicitSignerData = { chainId, ...accountData }
     const signed = await signer.sign(address, messages, fee, memo, explicitSignerData)
     const tx = TxRaw.encode(signed).finish()
@@ -187,6 +196,8 @@ export function useBalance() {
   const address = useAddress()
   const { chain } = useInitiaEssentials()
   const { data: balances } = useAllBalances(chain.rpc, address)
+  console.log(chain)
+  console.log('denom : ', balances)
   const balance = balances?.find(({ denom }) => denom === INIT_DENOM)?.amount
   return balance || "0"
 }

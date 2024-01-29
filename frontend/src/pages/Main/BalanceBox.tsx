@@ -37,6 +37,7 @@ const BalanceBox = ({ chickenNum, eggNum }: { chickenNum: number, eggNum: number
             </Stack>
         </Group>
     </Box>
+       
   )
 }
 

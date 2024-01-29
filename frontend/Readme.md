@@ -3,7 +3,7 @@
 ## 1. Install Dependency
 
 ```
-npm i --force
+pnpm install
 ```
 
 ## 2. Install Vite

@@ -1,0 +1,20 @@
+{
+  "key": "osmosis",
+  "displayName": "Osmosis testnet",
+
+  "rpc": "https://rpc.osmotest5.osmosis.zone",
+  "rest": "https://lcd.osmotest5.osmosis.zone",
+  "explorer": "https://explorer.osmotest5.osmosis.zone",
+  "faucet": "https://faucet.osmosis.zone",
+  "assetlist": "https://raw.githubusercontent.com/osmosis-labs/assetlists/main/osmo-test-4/osmo-test-4.assetlist.json",
+  "logo": "https://assets.initia.xyz/images/chains/Osmosis.webp",
+
+  "type": "cosmos",
+  "prefix": "osmo",
+  "currency": {
+    "ticker": "OSMO",
+    "denom": "uosmo",
+    "decimals": 6
+  },
+  "gasPrice": 0.025
+}

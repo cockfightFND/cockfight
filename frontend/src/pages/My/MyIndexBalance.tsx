@@ -7,7 +7,6 @@ import Icon from "../../styles/icons/Icon"
 const MyIndexBalance = () => {
   const address = useAddress()
   const balance = useBalance()
-
   return (
     <Stack spacing={36} bg="mono.8" c="mono.1" sx={{ border: "1px solid", borderRadius: 16 }} mt={16} px={18} py={24}>
       <Group position="apart">

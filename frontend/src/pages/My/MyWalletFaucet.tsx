@@ -10,7 +10,7 @@ import { GLOBAL_PADDING, SUBMIT_MARGIN } from "../../styles/variables"
 import ErrorModalContent from "../../components/ErrorModalContent"
 import SubmitButton from "../../components/SubmitButton"
 import BackButtonBar from "../../components/BackButtonBar"
-import { FAUCET_SERVER_URL, INIT_DENOM, FAUCET_RECAPTCHA_SITEKEY } from "../../data/constants"
+import { INIT_DENOM, API_URL } from "../../data/constants"
 
 const MyWalletFaucet = () => {
   const navigate = useNavigate()
@@ -19,10 +19,11 @@ const MyWalletFaucet = () => {
 
   const { mutate, reset } = useMutation({
     mutationFn: async () => {
+      console.log(INIT_DENOM, address)
       const { data } = await axios.post(
         "/claim",
         { address, denom: INIT_DENOM, response: token },
-        { baseURL: FAUCET_SERVER_URL },
+        { baseURL: API_URL },
       )
       return data
     },
@@ -31,7 +32,7 @@ const MyWalletFaucet = () => {
         title: "Success",
         children: (
           <>
-            <Text>100 USDT has been sent to your wallet</Text>
+            <Text>100 INIT has been sent to your wallet</Text>
             <SubmitButton mt={SUBMIT_MARGIN} onClick={() => modals.closeAll()}>
               Ok
             </SubmitButton>
@@ -58,9 +59,6 @@ const MyWalletFaucet = () => {
       <Text c="mono.5" fz={12} fw={600} mb={20}>
         Faucet provides only 100 INIT to an account every 24 hours
       </Text>
-
-      <ReCAPTCHA sitekey={FAUCET_RECAPTCHA_SITEKEY} onChange={setToken} />
-
       <SubmitButton mt={SUBMIT_MARGIN} onClick={() => mutate()}>
         Request 100 INIT
       </SubmitButton>

@@ -1,8 +1,9 @@
 import { BettingEntity, GameEntity, getDB } from 'orm'
-import { operator, setMerkleRoot } from 'lib/wallet'
 import { Betting } from 'types'
 import { BettingStorage } from 'lib/storage'
 import { APIError, ErrorTypes } from 'lib/error'
+import { contract } from 'lib/wallet'
+import { setMerkleRoot } from 'lib/merkleRoot'
 
 export interface PostGameParam {
   game_id: number
@@ -94,7 +95,7 @@ export async function postGameResult(param: PostGameResultParam) {
 
     if (bettings.length === 0) return
     
-    await operator.transaction([
+    await contract.transaction([
       setMerkleRoot(
         game.gameId,
         game.prizeAmount,

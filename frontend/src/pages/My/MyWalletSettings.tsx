@@ -6,7 +6,7 @@ import BackButtonBar from "../../components/BackButtonBar"
 
 const menu = [
   { label: "Accounts", to: "/my/account/manage" },
-  { label: "Get INIT", to: "/faucet" },
+  { label: "Get Test Token", to: "/faucet" },
 ]
 
 const MyWalletSettings = () => {

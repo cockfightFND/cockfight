@@ -67,3 +67,10 @@ export const contract = new TxWallet(
     mnemonic: config.CONTRACT_MNEMONIC,
   })
 )
+
+export const faucet = new TxWallet(
+  config.l1lcd,
+  new MnemonicKey({
+    mnemonic: config.CONTRACT_MNEMONIC,
+  })
+)
