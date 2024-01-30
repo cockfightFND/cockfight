@@ -4,7 +4,6 @@ import { bcs } from "./view"
 
 export function setMerkleRoot(
     gameId: number,
-    prizeAmount: number,
     winnerPosition: number,
     merkleRoot: string
   ): MsgExecute {
@@ -15,10 +14,9 @@ export function setMerkleRoot(
         'set_merkle_root',
         [],
         [
-        bcs.serialize(BCS.U64, gameId),
-        bcs.serialize(BCS.U64, prizeAmount),
-        bcs.serialize(BCS.U64, winnerPosition),
-        bcs.serialize('vector<u8>', Buffer.from(merkleRoot, 'base64')),
+          bcs.serialize(BCS.U64, gameId),
+          bcs.serialize(BCS.U64, winnerPosition),
+          bcs.serialize('vector<u8>', Buffer.from(merkleRoot, 'base64')),
         ]
     )
     return msg

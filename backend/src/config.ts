@@ -27,5 +27,5 @@ export const config = {
     }
   ),
   USE_LOG_FILE: USE_LOG_FILE === 'true' ? true : false,
-  UPDATE_INTERVAL: UPDATE_INTERVAL ? parseInt(UPDATE_INTERVAL) : 60000,
+  UPDATE_INTERVAL: UPDATE_INTERVAL ? parseInt(UPDATE_INTERVAL) : 10_000,
 }

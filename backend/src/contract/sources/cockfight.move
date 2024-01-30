@@ -8,7 +8,7 @@ module addr::cockfight {
 
     use initia_std::coin;
     use initia_std::object::{Self, Object, ExtendRef};
-    use initia_std::fungible_asset::{Self, Metadata, FungibleAsset, FungibleStore};
+    use initia_std::fungible_asset::{ Metadata, FungibleAsset};
     use initia_std::primary_fungible_store;
     use initia_std::table::{Self, Table};
     use initia_std::bcs;
@@ -26,6 +26,7 @@ module addr::cockfight {
     const EGAME_ALREADY_EXISTS: u64 = 8;
     const EINVALID_MERKLE_PROOFS: u64 = 9;
     const EINVALID_PROOF_LENGTH: u64 = 10;
+    const EINSUFFICIENT_BALANCE: u64 = 11;
 
     //
     //  Constatns
@@ -50,10 +51,7 @@ module addr::cockfight {
     }
 
     struct ModuleStore has key {
-        deposit_extend_ref: ExtendRef,
-        prize_extend_ref: ExtendRef,
-        deposit_store: Object<FungibleStore>,
-        prize_store: Object<FungibleStore>,
+        extend_ref: ExtendRef,
         total_chickens: u64,
         chicken_price: u64,
         egg_price: u64,
@@ -67,6 +65,19 @@ module addr::cockfight {
         winner_position: u64,	
         merkle_root: vector<u8> // merkle root (leaf node : hash(addr | position | eggs))
     }
+
+    //
+    //  Responses
+    //
+
+    struct ModuleResponse has drop {
+        total_chickens: u64,
+        chicken_price: u64,
+        egg_price: u64,
+        chickens : address,
+        eggs: address,
+        cock_fights: address
+    }
     
     //
     // Helper functions
@@ -79,10 +90,6 @@ module addr::cockfight {
         assert!(signer::address_of(operator) == @addr, error::permission_denied(EUNAUTHORIZED));
     }
 
-    public fun create_module_address(): address {
-        object::create_object_address(@addr, generate_module_seed())
-    }
-    
     fun generate_module_seed(): vector<u8>{
         let seed = b"cockfight";
         return seed
@@ -98,29 +105,14 @@ module addr::cockfight {
         egg_price: u64,
     ) {
         check_operator_permission(operator);
-        let constructor_ref = object::create_named_object(operator, generate_module_seed(), true);
-        let object = object::generate_signer(&constructor_ref);
-        let object_addr = object::address_from_constructor_ref(&constructor_ref);
+        assert!(!exists<ModuleStore>(@addr), error::already_exists(EMODULE_STORE_ALREADY_EXISTS));
 
-        assert!(!exists<ModuleStore>(object_addr), error::already_exists(EMODULE_STORE_ALREADY_EXISTS));
+        let constructor_ref = object::create_named_object(operator, b"cockfight", false);
+        let extend_ref = object::generate_extend_ref(&constructor_ref);
         assert!(chicken_price > egg_price && egg_price > 0, error::invalid_argument(EINVALID_PRICE_INITIALIZATION));
         
-        let deposit_constructor_ref = object::create_named_object(operator, b"deposit", true);
-        let prize_constructor_ref = object::create_named_object(operator, b"prize", true); 
-        let deposit_extend_ref = object::generate_extend_ref(&deposit_constructor_ref);
-        let prize_extend_ref = object::generate_extend_ref(&prize_constructor_ref);
-        object::disable_ungated_transfer(&object::generate_transfer_ref(&deposit_constructor_ref));
-        object::disable_ungated_transfer(&object::generate_transfer_ref(&prize_constructor_ref));
-
-        let metadata = uinit_metadata();
-        let deposit_store = fungible_asset::create_store(&deposit_constructor_ref, metadata);
-        let prize_store = fungible_asset::create_store(&prize_constructor_ref, metadata);
-
         let module_store = ModuleStore{
-            deposit_extend_ref,
-            prize_extend_ref,
-            prize_store,
-            deposit_store,
+            extend_ref,
             total_chickens: 0,
             chicken_price,
             egg_price,
@@ -128,7 +120,8 @@ module addr::cockfight {
             eggs: table::new<address,u64>(),
             cock_fights: table::new<u64, CockFight>(),
         };
-        move_to(&object, module_store);
+
+        move_to(operator, module_store);
     }
 
     public entry fun update_price_script(
@@ -137,8 +130,7 @@ module addr::cockfight {
         egg_price: u64,
     ) acquires ModuleStore {
         check_operator_permission(operator);
-        let module_addr = create_module_address();
-        let module_store = borrow_global_mut<ModuleStore>(module_addr);
+        let module_store = borrow_global_mut<ModuleStore>(@addr);
 
         assert!(chicken_price > egg_price && egg_price > 0, error::invalid_argument(EINVALID_PRICE_INITIALIZATION));
         module_store.chicken_price = chicken_price;
@@ -148,7 +140,7 @@ module addr::cockfight {
     public entry fun fund_prize_script(
         account: &signer,
         amount: u64
-    ) acquires ModuleStore {
+    ) {
         let prize = primary_fungible_store::withdraw(account, uinit_metadata(), amount);
         fund_prize(prize);
     }
@@ -157,28 +149,16 @@ module addr::cockfight {
         account: &signer,
         num: u64
     ) acquires ModuleStore {
-        let metadata = uinit_metadata();
-        let module_addr = create_module_address();
-        let module_store = borrow_global<ModuleStore>(module_addr);
-
         assert!(num > 0, error::invalid_argument(EINVALID_TRADE_NUM));
-        assert!(fungible_asset::store_metadata(module_store.deposit_store) == metadata, error::invalid_argument(EINVALID_METADATA));
-        
-        buy_chicken(account, metadata, num);
+        buy_chicken(account, uinit_metadata(), num);
     }
 
     public entry fun sell_chicken_script(
         account: &signer,
         num: u64
     )acquires ModuleStore{
-        let metadata = uinit_metadata();
-        let module_addr = create_module_address();
-        let module_store = borrow_global<ModuleStore>(module_addr);
-
         assert!(num > 0, error::invalid_argument(EINVALID_TRADE_NUM));
-        assert!(fungible_asset::store_metadata(module_store.deposit_store) == metadata, error::invalid_argument(EINVALID_METADATA));
-        
-        sell_chicken(account, metadata, num);
+        sell_chicken(account, uinit_metadata(), num);
     }
 
     // public entry fun claim_script(
@@ -198,8 +178,7 @@ module addr::cockfight {
     ) acquires ModuleStore {
         check_operator_permission(operator);
 
-        let module_addr = create_module_address();
-        let module_store = borrow_global_mut<ModuleStore>(module_addr);
+        let module_store = borrow_global_mut<ModuleStore>(@addr);
         
         assert!(!table::contains(&mut module_store.cock_fights, game_id), error::already_exists(EGAME_ALREADY_EXISTS));
         let cock_fight = CockFight {
@@ -217,11 +196,8 @@ module addr::cockfight {
 
     fun fund_prize(
         prize: FungibleAsset
-    ) acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global_mut<ModuleStore>(module_addr);
-
-        fungible_asset::deposit(module_store.prize_store, prize);
+    ) {
+        primary_fungible_store::deposit(@addr, prize );
     }
 
     fun buy_chicken(
@@ -229,13 +205,13 @@ module addr::cockfight {
         metadata: Object<Metadata>,
         num: u64,
     ) acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global_mut<ModuleStore>(module_addr);
+        let module_store = borrow_global_mut<ModuleStore>(@addr);
         let deposit_amount = module_store.chicken_price * num;
-        let deposit = primary_fungible_store::withdraw(account, metadata, deposit_amount);
+        assert!(coin::balance(signer::address_of(account), metadata) >= deposit_amount, error::invalid_argument(EINSUFFICIENT_BALANCE));
 
-        fungible_asset::deposit(module_store.deposit_store, deposit);
-        
+        let module_signer = object::generate_signer_for_extending(&module_store.extend_ref);
+        primary_fungible_store::transfer(account, metadata, signer::address_of(&module_signer), deposit_amount);
+
         module_store.total_chickens = module_store.total_chickens + num;
         
         if (!table::contains(&mut module_store.chickens, signer::address_of(account))){
@@ -259,15 +235,13 @@ module addr::cockfight {
         metadata: Object<Metadata>,
         num: u64,
     ) acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global_mut<ModuleStore>(module_addr);
-
+        let module_store = borrow_global_mut<ModuleStore>(@addr);
         let withdraw_amount = module_store.chicken_price * num;
-        let module_signer = object::generate_signer_for_extending(&module_store.deposit_extend_ref);
-        let withdraw = fungible_asset::withdraw(&module_signer, module_store.deposit_store, withdraw_amount);
-        let store = primary_fungible_store::ensure_primary_store_exists(signer::address_of(account), metadata);
-        fungible_asset::deposit(store, withdraw);
-       
+        let module_signer = object::generate_signer_for_extending(&module_store.extend_ref);
+
+        assert!(coin::balance(signer::address_of(&module_signer), metadata) >= withdraw_amount, error::invalid_argument(EINSUFFICIENT_BALANCE));
+        primary_fungible_store::transfer(&module_signer, metadata, signer::address_of(account), withdraw_amount);
+
         module_store.total_chickens = module_store.total_chickens - num;
         
         assert!(table::contains(&mut module_store.chickens, signer::address_of(account)), error::not_found(ENOT_FOUND_CHICKENS));
@@ -289,10 +263,9 @@ module addr::cockfight {
         position: u64,
         eggs: u64,
     ): vector<u8> {
-        let module_addr = create_module_address();
         let target_hash = {
             let betting_data = vector::empty<u8>();
-            vector::append(&mut betting_data, bcs::to_bytes(&module_addr));
+            vector::append(&mut betting_data, bcs::to_bytes(&@addr));
             vector::append(&mut betting_data, bcs::to_bytes(&account_addr));
             vector::append(&mut betting_data, bcs::to_bytes(&position));
             vector::append(&mut betting_data, bcs::to_bytes(&eggs));
@@ -359,35 +332,27 @@ module addr::cockfight {
     //
 
     #[view]
-    public fun get_total_chickens(): u64 acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global<ModuleStore>(module_addr);
-        module_store.total_chickens
+    public fun get_module_store(): ModuleResponse acquires ModuleStore {
+        let module_store = borrow_global<ModuleStore>(@addr);
+        
+        ModuleResponse {
+            total_chickens: module_store.total_chickens,
+            chicken_price: module_store.chicken_price,
+            egg_price: module_store.egg_price,
+            chickens: table::handle(&module_store.chickens),
+            eggs:table::handle(&module_store.eggs),
+            cock_fights: table::handle(&module_store.cock_fights)
+        }
     }
 
     #[view]
     public fun get_user_chickens(account: address): u64 acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global<ModuleStore>(module_addr);
+        let module_store = borrow_global<ModuleStore>(@addr);
         if (table::contains(&module_store.chickens, account)) {
             *table::borrow(&module_store.chickens, account)
         } else {
             0
         }
-    }
-
-    #[view]
-    public fun get_chicken_price(): u64 acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global<ModuleStore>(module_addr);
-        module_store.chicken_price
-    }
-
-    #[view]
-    public fun get_egg_price(): u64 acquires ModuleStore {
-        let module_addr = create_module_address();
-        let module_store = borrow_global<ModuleStore>(module_addr);
-        module_store.egg_price
     }
 
     // public fun get_eggs_per_epoch()
@@ -437,7 +402,7 @@ module addr::cockfight {
         (mint_cap, metadata)
     }
 
-    #[test(chain=@0x1, operator=@0x3F4C26C0385D22009956EB3A4E8DBD095962485E, user=@0x123)]
+    #[test(chain=@0x1, operator=@addr, user=@0x123)]
     fun test_trade_chicken(
         chain: &signer,
         operator: &signer,
@@ -447,30 +412,35 @@ module addr::cockfight {
         let egg_price = 1_000;
         let buy_num = 100;
         let sell_num = 40;
-
         let (mint_cap, metadata) = test_setup(chain, operator, chicken_price, egg_price);
-        assert!(get_chicken_price() == chicken_price, 1);
-        assert!(get_egg_price() == egg_price, 1);
 
         coin::mint_to(&mint_cap, signer::address_of(operator), 1_000_000_000);
         coin::mint_to(&mint_cap, signer::address_of(user), 1_000_000_000);
         fund_prize_script(operator,1_000_000_000);
         
-        assert!(get_total_chickens() == 0, 1);
+
+        let module_store = get_module_store();
+        assert!(module_store.chicken_price == chicken_price, 1);
+        assert!(module_store.egg_price == egg_price, 1);
+        assert!(module_store.total_chickens == 0, 1);
         assert!(coin::balance(signer::address_of(user), metadata) == 1_000_000_000, 2);
-        assert!(get_user_chickens(signer::address_of(user))== 0, 3);
+        assert!(get_user_chickens(signer::address_of(user)) == 0, 3);
+
         buy_chicken_script(user, buy_num);
-        assert!(get_total_chickens() == buy_num, 4);
+        
         assert!(coin::balance(signer::address_of(user), metadata) == 1_000_000_000 - (chicken_price * buy_num), 5);
         assert!(get_user_chickens(signer::address_of(user)) == buy_num, 6);
 
         sell_chicken_script(user, sell_num);
-        assert!(get_total_chickens() == buy_num - sell_num, 7);
+        
         assert!(coin::balance(signer::address_of(user), metadata) == 1_000_000_000 - (chicken_price * (buy_num - sell_num)), 8);
         assert!(get_user_chickens(signer::address_of(user)) == buy_num - sell_num, 9);
 
         update_price_script(operator, 2_000_000, 2_000);
-        assert!(get_chicken_price() == 2_000_000, 10);
-        assert!(get_egg_price() == 2_000, 11);
+        
+        let module_store = get_module_store();
+        assert!(module_store.total_chickens == buy_num - sell_num, 7);
+        assert!(module_store.chicken_price == 2_000_000, 10);
+        assert!(module_store.egg_price == 2_000, 11);
     }
 }

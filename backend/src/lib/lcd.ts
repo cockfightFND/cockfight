@@ -14,7 +14,6 @@ export async function getResource<T>(
   lcd: LCDClient,
   address: AccAddress,
   structTag: string,
-  height: number,
   maxRetries = 60,
   retryInterval = 1000
 ): Promise<{ type: string; data: T } | undefined> {
@@ -23,7 +22,6 @@ export async function getResource<T>(
       const res = await lcd.apiRequester.get<{ resource: Resource }>(
         `/initia/move/v1/accounts/${address}/resources/by_struct_tag`,
         { struct_tag: structTag },
-        { 'x-cosmos-block-height': height }
       )
       return res.resource ? JSON.parse(res.resource.move_resource) : undefined
     } catch (e) {
@@ -73,7 +71,6 @@ export async function getTableEntry(
 export async function getTableEntries(
   lcd: LCDClient,
   address: string,
-  height: number,
   params: Partial<PaginationOptions & APIParams> = {},
   maxRetries = 60,
   retryInterval = 1000
@@ -83,9 +80,7 @@ export async function getTableEntries(
       const res = await lcd.apiRequester.get<{
         table_entries: TableEntry[]
         pagination: Pagination
-      }>(`/initia/move/v1/tables/${address}/entries`, params, {
-        'x-cosmos-block-height': height,
-      })
+      }>(`/initia/move/v1/tables/${address}/entries`, params)
       return res ? [res.table_entries, res.pagination] : undefined
     } catch (e) {
       if (i === maxRetries - 1) throw e
@@ -97,7 +92,6 @@ export async function getTableEntries(
 export async function getAllTableEntries(
   lcd: LCDClient,
   tableHandle: string,
-  height: number
 ): Promise<TableEntry[]> {
   let entries: TableEntry[] = []
   let nextKey: string | undefined = ''
@@ -107,7 +101,6 @@ export async function getAllTableEntries(
     const [res, pagination] = (await getTableEntries(
       lcd,
       tableHandle,
-      height,
       params
     )) ?? [[], {}]
     entries = entries.concat(res)

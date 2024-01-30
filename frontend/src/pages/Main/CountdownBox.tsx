@@ -47,7 +47,7 @@ const CountdownBox = ({ targetTime }: { targetTime: string }) => {
                 color: '#333', // Darker text color for contrast
             }}
         >
-            <Text style={{ fontSize: '0.8rem', color: '#666' }}>Next Time</Text> {/* Small-sized text */}
+            <Text style={{ fontSize: '0.8rem', color: '#666' }}>Next Egg Time</Text> {/* Small-sized text */}
             <Text style={{ fontWeight: 'bold' }}>{timeLeft}</Text>
         </Box>
     );

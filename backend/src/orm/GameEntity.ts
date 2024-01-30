@@ -9,8 +9,11 @@ export class GameEntity {
   positionNum: number 
 
   @Column('int', { nullable: true })
-  winnerPosition: number
+  winnerPosition: number | null
 
-  @Column('int')
-  prizeAmount: number 
+  @Column()
+  endTime: Date
+
+  @Column()
+  isEnded: boolean
 }

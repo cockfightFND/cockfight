@@ -6,17 +6,14 @@ import BalanceBox from "./BalanceBox"
 import { useEffect, useState } from "react"
 import CountdownBox from "./CountdownBox"
 import { useGetUserChickens } from "../../data/query"
+import { useAPI } from "../../data/api"
 
 const MainIndex = () => {
   const address = useAddress()
-  // const [myChicken, setMyChicken] = useState(0);
-  // const [myEgg, setMyEgg] = useState(0);
   const {data: myChicken} = useGetUserChickens(address);
+  // const nextEggTime = useAPI<{  }>('/chickens/nextEggTime')
 
   if (!address) return <CreateAccount />
-
-  
-
 
   return (
     <>

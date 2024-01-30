@@ -1,3 +1,4 @@
+import { APIError, ErrorTypes } from 'lib/error'
 import { BettingEntity, getDB } from 'orm'
 
 export interface GetBettingListParam {
@@ -15,14 +16,13 @@ export async function getBettingList(
   const queryRunner = db.createQueryRunner('slave')
 
   try {
-
     const qb = queryRunner.manager.createQueryBuilder(
       BettingEntity,
       'betting'
     ).where('betting.game_id = :gameId', {
       gameId: param.game_id,
     })
-
+    
     const bettings = await qb.getMany()
 
     return {
@@ -47,6 +47,18 @@ export async function postBetting(
   const queryRunner = db.createQueryRunner('slave')
 
   try {
+    const betting = await queryRunner
+      .manager
+      .getRepository(BettingEntity)
+      .findOne({
+        where: {
+          address: req.address,
+          gameId: req.game_id,
+        },
+      })
+    
+    if (betting) throw new APIError(ErrorTypes.INVALID_REQUEST_ERROR, 'betting already exists')
+    
     await queryRunner
       .manager
       .getRepository(BettingEntity)

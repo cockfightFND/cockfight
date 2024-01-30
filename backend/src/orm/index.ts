@@ -11,11 +11,13 @@ import { BettingEntity } from './BettingEntity'
 import { GameEntity } from './GameEntity'
 import { MarketEntity } from './MarketEntity'
 import { DashboardEntity } from './DashboardEntity'
+import { UserEntity } from './UserEntity'
 
 export * from './BettingEntity'
 export * from './GameEntity'
 export * from './MarketEntity'
 export * from './DashboardEntity'
+export * from './UserEntity'
 
 export const staticOptions = {
   supportBigNumbers: true,
@@ -25,6 +27,7 @@ export const staticOptions = {
     GameEntity,
     MarketEntity,
     DashboardEntity,
+    UserEntity
   ],
 }
 

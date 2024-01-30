@@ -15,8 +15,8 @@ export class BettingEntity {
   position: number
   
   @Column('text', { nullable: true})
-  merkleRoot: string
+  merkleRoot: string | null
 
   @Column('text', { nullable: true, array: true })
-  merkleProof: string[]
+  merkleProof: string[] | null
 }

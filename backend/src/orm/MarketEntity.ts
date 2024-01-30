@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm'
 @Entity('market')
 export class MarketEntity {
     @PrimaryColumn('text')
-    time: string
+    time: Date
     
     @Column('int')
     stage: number

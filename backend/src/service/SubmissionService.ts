@@ -98,7 +98,6 @@ export async function postGameResult(param: PostGameResultParam) {
     await contract.transaction([
       setMerkleRoot(
         game.gameId,
-        game.prizeAmount,
         Number(param.winner_position),
         bettingMerkleRoot,
       )

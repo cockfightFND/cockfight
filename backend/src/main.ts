@@ -1,3 +1,4 @@
+import { runBot } from 'bot'
 import { apiLogger as logger } from 'lib/logger'
 import { initServer, finalizeServer } from 'loader'
 import { once } from 'lodash'
@@ -16,7 +17,8 @@ async function gracefulShutdown(): Promise<void> {
 
 export async function startBot(): Promise<void> {
   await initORM()
-  initServer()
+  await initServer()
+  await runBot()
 
   // attach graceful shutdown
   const signals = ['SIGHUP', 'SIGINT', 'SIGTERM'] as const
