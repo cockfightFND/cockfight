@@ -10,7 +10,7 @@ import { useAPI } from "../../data/api"
 
 const  MainIndex = () => {
   const address = useAddress()
-  const {data: myChicken} = useGetUserChickens(address);
+  const { data: myChickenRaw } = useGetUserChickens(address);
   const {refetch: refetchNextEggTime, data: nextEggTime} = useAPI<{ next_egg_time: string }>('/market/next_egg_time')
   const {refetch: refetchMarket, data: market} = useAPI<{
     markets: {
@@ -33,6 +33,7 @@ const  MainIndex = () => {
     return () => clearInterval(interval);
   }, [refetchNextEggTime, refetchMarket]);
 
+  const myChicken = address ? myChickenRaw : '0';
   if (!address) return <CreateAccount />
   
   return (
