@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Text, Group, TextInput } from '@mantine/core';
 import { CONTRACT_BECH_ADDRESS, CONTRACT_MODULE_NAME } from '../../data/constants';
-import { computeCoinMetadata, normalize } from '../../utils/metadata';
 import { useAddress, useBalance, useSignAndBroadcastTxSync } from '../../data/account';
 import { MsgExecute } from '@initia/initia.proto/initia/move/v1/tx';
 import { bcs } from "@initia/query"

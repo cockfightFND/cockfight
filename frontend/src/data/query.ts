@@ -1,6 +1,18 @@
-import { bcs, useViewFunction } from "../../modules"
-import { CONTRACT_HEX_ADDRESS, CONTRACT_MODULE_NAME } from "./constants"
-import { AccAddress } from "@initia/initia.js"
+import { CONTRACT_HEX_ADDRESS, CONTRACT_MODULE_NAME, REST_URL } from "./constants"
+import { AccAddress, BCS, LCDClient } from "@initia/initia.js"
+import type { MoveAPI } from "@initia/initia.js"
+import type { QueryKey, UseQueryOptions } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
+
+export const bcs = BCS.getInstance();
+const lcd = new LCDClient(REST_URL)
+export const useViewFunction = <T>(args: Parameters<MoveAPI["viewFunction"]>, options?: UseQueryOptions<T>) => {
+  return useQuery<T>({
+    queryKey: ["move.viewFunction", ...args] as QueryKey,
+    queryFn: async () => await lcd.move.viewFunction<T>(...args),
+    ...options,
+  })
+}
 
 export interface ModuleResponse {
   total_chickens: string
