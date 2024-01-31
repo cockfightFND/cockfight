@@ -10,7 +10,8 @@ import { useAPI } from "../../data/api"
 
 const  MainIndex = () => {
   const address = useAddress()
-  const { data: myChickenRaw } = useGetUserChickens(address);
+  const [userChicken, setUserChicken] = useState<any>(null)
+  const { data: myChickenRaw } = useGetUserChickens(address)
   const {refetch: refetchNextEggTime, data: nextEggTime} = useAPI<{ next_egg_time: string }>('/market/next_egg_time')
   const {refetch: refetchMarket, data: market} = useAPI<{
     markets: {
@@ -28,6 +29,7 @@ const  MainIndex = () => {
     const interval = setInterval(() => {
       refetchNextEggTime()
       refetchMarket()
+
     }, 1000); // 1초 간격으로 실행
 
     return () => clearInterval(interval);
@@ -38,6 +40,10 @@ const  MainIndex = () => {
   
   return (
     <>
+     {
+      address ?
+      <CreateAccount />
+      :
       <Stack spacing={24}>
         <Title c="brand" ff="Fontdiner Swanky" fw={400} fz={28} mt={24} mb={16}>
           CockFight
@@ -46,6 +52,8 @@ const  MainIndex = () => {
         <GameCarousel></GameCarousel>
         <CountdownBox targetTime={nextEggTime?.next_egg_time ?? ''}></CountdownBox>
       </Stack>
+     }
+      
     </>
   )
 }

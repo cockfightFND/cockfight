@@ -16,7 +16,7 @@ export const WEB3AUTH_KEY = import.meta.env.INITIA_WEB3AUTH_KEY
 export const WEB3AUTH_SECRET = import.meta.env.INITIA_WEB3AUTH_SECRET
 
 // API
-export const API_URL = import.meta.env.API_URL || "http://localhost:3000"
+export const API_URL = import.meta.env.INITIA_API_URL || "http://localhost:3000"
 
 // CONTRACT
 export const CONTRACT_MODULE_NAME = 'cockfight'

@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 
 export const bcs = BCS.getInstance();
 const lcd = new LCDClient(REST_URL)
+
 export const useViewFunction = <T>(args: Parameters<MoveAPI["viewFunction"]>, options?: UseQueryOptions<T>) => {
   return useQuery<T>({
     queryKey: ["move.viewFunction", ...args] as QueryKey,
@@ -28,17 +29,22 @@ export function useGetModuleStore() {
     CONTRACT_HEX_ADDRESS,
     CONTRACT_MODULE_NAME,
     "get_module_store",
-    [],
+  [],
     [],
   ])
 }
 
 export function useGetUserChickens(address: string) {
-  return useViewFunction<string>([
-    CONTRACT_HEX_ADDRESS,
-    CONTRACT_MODULE_NAME,
-    "get_user_chickens",
-    [],
-    [bcs.serialize("address", AccAddress.toHex(address))],
-  ])
+  try{
+    const res = useViewFunction<string>([
+      CONTRACT_HEX_ADDRESS,
+      CONTRACT_MODULE_NAME,
+      "get_user_chickens",
+      [],
+      [bcs.serialize("address", AccAddress.toHex(address))],
+    ])
+    return res    
+  } catch (error) {
+    return {data : '0'}
+  }
 }
