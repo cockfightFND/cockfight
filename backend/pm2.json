@@ -1,7 +1,7 @@
 {
   "apps" : [
       {
-          "name" : "vip-score-bot",
+          "name" : "cockfight-backend",
           "cwd" : ".",
           "script" : "npm run start",
           "watch" : true,
