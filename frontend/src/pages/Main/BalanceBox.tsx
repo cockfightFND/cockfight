@@ -2,10 +2,13 @@ import { Box, Flex, Group, Stack, Text } from "@mantine/core"
 import { Link } from "react-router-dom"
 import CircleImage from "../../components/CircleImage"
 import { ChickenImages, EggImages } from "../Custom/items"
-import { CHICKEN_PRICE, EGG_PRICE } from "./Custom/calculate";
+import { useGetModuleStore } from "../../data/query"
+import { formatAmount } from "@initia/utils"
 
 const BalanceBox = ({ chickenNum, eggNum }: { chickenNum: number, eggNum: number }) => {
-  return (
+    const { data: moduleResponse } = useGetModuleStore()
+  
+    return (
     <Box
         bg="white"
         p={20}
@@ -22,7 +25,7 @@ const BalanceBox = ({ chickenNum, eggNum }: { chickenNum: number, eggNum: number
             <Stack spacing="xs">
                 <Text>{chickenNum}</Text>
                 <Text style={{ fontSize: 'tiny', color: 'lightgray' }}>
-                    {chickenNum * CHICKEN_PRICE} USDT
+                {formatAmount(chickenNum * parseInt(moduleResponse?.chicken_price ?? '0'))} INIT
                 </Text>
             </Stack>
         </Group>
@@ -32,7 +35,7 @@ const BalanceBox = ({ chickenNum, eggNum }: { chickenNum: number, eggNum: number
             <Stack spacing="xs">
                 <Text>{eggNum}</Text>
                 <Text style={{ fontSize: 'tiny', color: 'lightgray' }}>
-                    {eggNum * EGG_PRICE} USDT
+                    {formatAmount(eggNum * parseInt(moduleResponse?.egg_price ?? '0'))} INIT
                 </Text>
             </Stack>
         </Group>

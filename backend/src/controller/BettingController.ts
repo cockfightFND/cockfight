@@ -16,7 +16,8 @@ export class BettingController extends KoaController {
     operationId: 'getBetting',
     request: {
       query: z.object({
-        gameId: z.number().optional(),
+        game_id: z.number().optional(),
+        address: z.string().optional(),
       }),
     },
   })

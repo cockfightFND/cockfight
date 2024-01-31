@@ -20,8 +20,9 @@ export class GameFeeder extends Bot {
     const bettings = await manager.getRepository(BettingEntity).find({
       where: { gameId }
     })
+    if (bettings.length === 0) return null
 
-    const positionCount = {}
+    const positionCount = { 1: 0, 2:0 }
     let minPosition: number | null = null;
     let minCount = Infinity;
 
@@ -29,11 +30,13 @@ export class GameFeeder extends Bot {
       if (!positionCount[betting.position]) {
         positionCount[betting.position] = 0
       }
-      positionCount[betting.position] += 1
-
-      if (positionCount[betting.position] < minCount) {
-        minCount = positionCount[betting.position]
-        minPosition = betting.position
+      positionCount[betting.position] += betting.eggs
+    }
+    // get minimum position
+    for (const position in positionCount) {
+      if (positionCount[position] < minCount) {
+        minCount = positionCount[position]
+        minPosition = Number(position)
       }
     }
 
@@ -46,13 +49,30 @@ export class GameFeeder extends Bot {
     const gameId = lastGameEntity ? lastGameEntity.gameId + 1 : 1
     const game: GameEntity = {
       gameId,
-      positionNum: 2,
+      positionNum: 2, // TODO: set position by game 
       winnerPosition: null,
       endTime: this.getNextFeedTime(time),
       isEnded: false
     }
     await manager.getRepository(GameEntity).save(game)
   }
+
+  async distributeRewards(manager: EntityManager, gameId: number, winnerPosition: number): Promise<void> {
+    const bettings = await manager.getRepository(BettingEntity).find({
+      where: { gameId }
+    })
+    if (bettings.length === 0) return
+
+    for (const betting of bettings) {
+      if (betting.position === winnerPosition) {
+        await manager.getRepository(BettingEntity).save({
+          ...betting,
+          reward: betting.eggs * 10
+        })
+      }
+    }
+  }
+
 
   async endGame(manager: EntityManager): Promise<void> {
     const games = await manager.getRepository(GameEntity).find({
@@ -63,8 +83,14 @@ export class GameFeeder extends Bot {
     const now = new Date()
     for (const game of games) {
       if (game.endTime < now) {
+        
         const winnerPosition = await this.calculateWinnerPosition(manager, game.gameId)
-        if (!winnerPosition) continue
+        if (!winnerPosition) {
+          await manager.getRepository(GameEntity).delete({
+            gameId: game.gameId
+          })
+          continue
+        }
         await manager.getRepository(GameEntity).save({
           ...game,
           isEnded: true,
@@ -72,6 +98,7 @@ export class GameFeeder extends Bot {
         })
 
         // give reward for winner 
+        await this.distributeRewards(manager, game.gameId, winnerPosition)
       }
     }
   }

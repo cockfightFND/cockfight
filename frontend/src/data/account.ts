@@ -196,8 +196,6 @@ export function useBalance() {
   const address = useAddress()
   const { chain } = useInitiaEssentials()
   const { data: balances } = useAllBalances(chain.rpc, address)
-  console.log(chain)
-  console.log('denom : ', balances)
   const balance = balances?.find(({ denom }) => denom === INIT_DENOM)?.amount
   return balance || "0"
 }

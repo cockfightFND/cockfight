@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { config } from 'config'
 import { CONTRACT_HEX_ADDRESS, CONTRACT_MODULE_NAME } from 'lib/constants'
-import { MarketEntity } from 'orm'
+import { MarketEntity, UserEntity } from 'orm'
 import { EntityManager } from 'typeorm'
 import { Bot } from './Bot'
 import { getModuleStoreWithRetry } from 'lib/retry'
+import { YIELD_PER_CHICKEN } from './RewardFeeder'
 
 const MARKET_FEED_INTERVAL = 60 * 1000
 
@@ -46,15 +47,23 @@ export class MarketFeeder extends Bot {
   async feed(manager: EntityManager, time: Date): Promise<void> {
     const moduleStore = await getModuleStoreWithRetry();
 
+    const users = await manager.getRepository(UserEntity).find()
+    let totalEggNum = 0;
+    if (users.length !== 0) {
+      for (const user of users) {
+        const userEggNum = user.egg
+        totalEggNum += userEggNum
+      }
+    }
+
     const entity: MarketEntity = {
       time: this.getNextFeedTime(time),
       stage: await this.getNextStage(manager),
-      totalChickenNum: parseInt(moduleStore.total_chicken),
-      totalEggNum: parseInt(moduleStore.total_chicken) * 10,
-      chickenPrice: parseInt(moduleStore.chicken_price),
-      eggPrice: parseInt(moduleStore.egg_price),
+      totalChickenNum: parseInt(moduleStore.total_chickens) ?? 0,
+      totalEggNum, 
+      chickenPrice: parseInt(moduleStore.chicken_price) ?? 0,
+      eggPrice: parseInt(moduleStore.egg_price) ?? 0,
     }
-
     await manager.getRepository(MarketEntity).save(entity)
   }
 

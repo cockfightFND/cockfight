@@ -8,6 +8,8 @@ import { StackedCarousel, ResponsiveContainer } from "react-stacked-center-carou
 // import { useAPI } from "../../../data/api"
 import DefaultButton from "../../components/DefaultButton"
 import { CockFight, TestCockFights } from "../Custom/items"
+import { GameEntity } from "./CockFight/types/entity"
+import { useAPI } from "../../data/api"
  
 const GameCarousel = () => {
   const containerRef = useRef<StackedCarousel | undefined>()
@@ -52,6 +54,9 @@ const Slide = memo((props: StackedCarouselSlideProps) => {
   const navigate = useNavigate()
   const { data, dataIndex } = props
   const fight: CockFight = data[dataIndex]
+  const { data: gamesData } = useAPI<{ games:GameEntity[]}>("/game")
+  const games = gamesData?.games || [];
+  const targetGame = games.find(game => !game.isEnded);
 
   if (!fight) return null
 
@@ -79,10 +84,10 @@ const Slide = memo((props: StackedCarouselSlideProps) => {
 
         <DefaultButton
           component={Link}
-          to={"./pool/" + fight.fightId}
+          to={"./fight/" + targetGame?.gameId ?? 0}
           h={30}
           mt={8}
-          onTouchEnd={() => navigate("./pool/" + fight.fightId)}
+          onTouchEnd={() => navigate("./fight/" + targetGame?.gameId ?? 0)}
         >
           Fight!
         </DefaultButton>

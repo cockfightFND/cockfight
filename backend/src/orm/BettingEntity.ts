@@ -19,4 +19,7 @@ export class BettingEntity {
 
   @Column('text', { nullable: true, array: true })
   merkleProof: string[] | null
+
+  @Column('int', {nullable: true})
+  reward: number | null
 }

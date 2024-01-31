@@ -22,6 +22,7 @@ import MyWalletFaucet from "./pages/My/MyWalletFaucet"
 import ManageAccounts from "./pages/My/Account/ManageAccounts"
 import CreateAccountMnemonicForm from "./pages/My/Account/CreateAccountMnemonicForm"
 import SocialLogin from "./pages/My/Account/SocialLogin"
+import FightEntry from "./pages/Main/CockFight/FightEntry"
 
 
 const routes = [
@@ -34,6 +35,7 @@ const routes = [
         path: "main",
         children: [
           { index: true, element: <MainIndex /> },
+          { path: "fight/:id", element: <FightEntry /> },
         ],
       },
       {

@@ -5,6 +5,7 @@ export const LIST_URL = import.meta.env.INITIA_LIST_URL || "https://list.stone-1
 export const APP_URL = import.meta.env.INITIA_APP_URL || "https://app.stone-13.initia.xyz"
 export const OMNITIA_API_URL = "https://omni-api.stone-13.initia.xyz"
 export const VIP_API_URL = import.meta.env.INITIA_VIP_API_URL || "https://vip.stone-13.initia.xyz"
+
 export const TOKENS_URL = new URL("/tokens.json", LIST_URL).href
 export const PAIRS_URL = new URL("/pairs.json", LIST_URL).href
 export const IBC_CHANNELS_URL = new URL("/ibc/channels.json", LIST_URL).href

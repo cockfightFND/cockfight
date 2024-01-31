@@ -3,6 +3,9 @@ import { BettingController } from './BettingController'
 import { SubmissionController } from './SubmissionController'
 import { FaucetController } from './FaucetController'
 import { MarketController } from './MarketController'
+import { UserController } from './UserController'
+import { RewardController } from './RewardController'
+import { GameController } from './GameController'
 
 
 const controllers = [
@@ -10,6 +13,9 @@ const controllers = [
   SubmissionController,
   FaucetController,
   MarketController,
+  UserController,
+  RewardController,
+  GameController
 ]
   .map((prototype) => {
     const controller = new prototype()

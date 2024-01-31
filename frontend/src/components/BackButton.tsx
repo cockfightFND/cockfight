@@ -17,7 +17,7 @@ const _BackButton = forwardRef<HTMLButtonElement, Props>(({ to, replace, ...othe
   return (
     <UnstyledButton
       p={GLOBAL_PADDING}
-      onClick={() => (to ? navigate(to, { state, replace }) : navigate(-1))}
+      onClick={() => (to ? navigate(to, { state, replace }) : navigate("/main"))}
       ref={ref}
       {...others}
     >

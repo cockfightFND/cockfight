@@ -9,8 +9,8 @@ import { AccAddress } from '@initia/initia.js'
 import { stripQuotes } from 'lib/util'
 import { getModuleStoreWithRetry } from 'lib/retry'
 
-const REWARD_FEED_INTERVAL = 60 * 1000
-const YIELD_PER_CHICKEN = 2
+export const REWARD_FEED_INTERVAL = 60 * 1000
+export const YIELD_PER_CHICKEN = 2
 
 interface Table {
   handle: string
@@ -34,46 +34,53 @@ interface CockfightModuleStore {
 
 interface ChickenMap {
   [address: AccAddress]: number
-
 }
 
 export class RewardFeeder extends Bot {
-  async getAllUsers(manager: EntityManager): Promise<ChickenMap> {
-    const cockfightMap: ChickenMap = {}
-    const res = await getModuleStoreWithRetry();
-    console.log(res)
-    const resource = await getResource<CockfightModuleStore>(
-      config.l1lcd,
-      CONTRACT_HEX_ADDRESS,
-      `${CONTRACT_HEX_ADDRESS}::${CONTRACT_MODULE_NAME}::ModuleStroe`,
-    )
-    console.log(CONTRACT_HEX_ADDRESS)
-    console.log('resource:', resource)
-    if (!resource) return cockfightMap
+  async getAllUserChickens(): Promise<ChickenMap> {
+    const chickenMap: ChickenMap = {}
+    const moduleStore = await getModuleStoreWithRetry();
+    const chickensTableHandle = moduleStore.chickens
+
+    if (!moduleStore) throw new Error('module store not found');
 
     const chickenEntries = await getAllTableEntries(
       config.l1lcd,
-      resource.data.chickens.handle,
+      chickensTableHandle
     )
+    
     for (const entry of chickenEntries) {
       const address = AccAddress.fromHex(stripQuotes(entry.key))
-      console.log(
-        `${chickenEntries.indexOf(entry) + 1}/${
-          chickenEntries.length
-        } getting chicken for ${address}`
-      )
-      if (!cockfightMap[address]) cockfightMap[address] = 0
+      if (!chickenMap[address]) chickenMap[address] = 0
       const chicken = JSON.parse(entry.value) as any
-      cockfightMap[address] = parseInt(chicken)
+      chickenMap[address] = parseInt(chicken)
     }
-    return cockfightMap
+
+    return chickenMap
   }
 
-  async feed(manager: EntityManager, time: Date): Promise<void> {
+  async saveUserChickens(manager: EntityManager, chickenMap: ChickenMap): Promise<void> {
+    for (const [address, chicken] of Object.entries(chickenMap)) {
+      const user = await manager.getRepository(UserEntity).findOne({ 
+        where: { address }
+      })
+
+      const userEntity: UserEntity = {
+        address,
+        chicken,
+        egg: user ? user.egg : 0
+      }
+
+      await manager.getRepository(UserEntity).save(userEntity);
+    }
+  }
+
+  async feed(manager: EntityManager): Promise<void> {
     const users = await manager.getRepository(UserEntity).find()
     if (users.length === 0) return
     for (const user of users) {
         const chicken = user.chicken;
+        if (chicken === 0) continue;
         const eggs = chicken * YIELD_PER_CHICKEN;
         user.egg += eggs;
         await manager.getRepository(UserEntity).save(user);
@@ -95,9 +102,10 @@ export class RewardFeeder extends Bot {
 
   public async process(manager: EntityManager): Promise<void> {
     this.nextFeedTs = this.getFeedTime()
-    await this.getAllUsers(manager);
+    const chickenMap = await this.getAllUserChickens();
+    await this.saveUserChickens(manager, chickenMap);
     if (this.nextFeedTs > new Date()) return
-    await this.feed(manager, this.nextFeedTs);
+    await this.feed(manager);
     this.nextFeedTs = await this.getNextFeedTime(this.nextFeedTs)
   }
 }

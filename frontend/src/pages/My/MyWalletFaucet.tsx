@@ -19,7 +19,6 @@ const MyWalletFaucet = () => {
 
   const { mutate, reset } = useMutation({
     mutationFn: async () => {
-      console.log(INIT_DENOM, address)
       const { data } = await axios.post(
         "/claim",
         { address, denom: INIT_DENOM, response: token },

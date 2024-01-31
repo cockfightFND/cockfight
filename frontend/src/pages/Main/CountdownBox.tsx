@@ -8,10 +8,10 @@ const CountdownBox = ({ targetTime }: { targetTime: string }) => {
         const interval = setInterval(() => {
             const now = new Date();
             const target = new Date(targetTime);
+            
             if (isNaN(target.getTime())) return
-    
             const difference = target.getTime() - now.getTime();
-
+            
             if (difference <= 0) {
                 clearInterval(interval);
                 setTimeLeft('Time is up!');

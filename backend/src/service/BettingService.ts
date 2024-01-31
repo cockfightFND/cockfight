@@ -1,8 +1,9 @@
 import { APIError, ErrorTypes } from 'lib/error'
-import { BettingEntity, getDB } from 'orm'
+import { BettingEntity, UserEntity, getDB } from 'orm'
 
 export interface GetBettingListParam {
-  game_id: number
+  game_id?: number
+  address?: string
 }
 
 interface GetBettingListResponse {
@@ -19,11 +20,12 @@ export async function getBettingList(
     const qb = queryRunner.manager.createQueryBuilder(
       BettingEntity,
       'betting'
-    ).where('betting.game_id = :gameId', {
-      gameId: param.game_id,
-    })
-    
+    )
+
+    if (param.game_id) qb.where('betting.gameId = :gameId', { gameId: param.game_id })
+    if (param.address) qb.where('betting.address = :address', { address: param.address })
     const bettings = await qb.getMany()
+    if (bettings.length === 0) throw new APIError(ErrorTypes.NOT_FOUND_ERROR, 'bettings not found')
 
     return {
       bettings,
@@ -47,6 +49,18 @@ export async function postBetting(
   const queryRunner = db.createQueryRunner('slave')
 
   try {
+    const user = await queryRunner
+      .manager
+      .getRepository(UserEntity)
+      .findOne({
+        where: {
+          address: req.address,
+        }
+      })
+      
+    if (!user) throw new APIError(ErrorTypes.NOT_FOUND_ERROR, 'user not found')
+    if (user.egg < req.eggs) throw new APIError(ErrorTypes.NOT_FOUND_ERROR, 'user eggs not enough')
+
     const betting = await queryRunner
       .manager
       .getRepository(BettingEntity)
@@ -57,8 +71,16 @@ export async function postBetting(
         },
       })
     
-    if (betting) throw new APIError(ErrorTypes.INVALID_REQUEST_ERROR, 'betting already exists')
-    
+    let eggs = req.eggs
+    if (betting) eggs += betting.eggs
+    await queryRunner
+      .manager
+      .getRepository(UserEntity)
+      .save({
+        ...user,
+        egg: user.egg - req.eggs,
+      })
+
     await queryRunner
       .manager
       .getRepository(BettingEntity)
@@ -66,8 +88,9 @@ export async function postBetting(
         address: req.address,
         gameId: req.game_id,
         position: req.position,
-        eggs: req.eggs,
+        eggs: eggs,
       })
+
   } finally {
     await queryRunner.release()
   }
