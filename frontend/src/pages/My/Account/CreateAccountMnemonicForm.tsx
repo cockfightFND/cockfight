@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form"
 import { useManageAccount } from "../../../data/account"
 import SubmitButton from "../../../components/SubmitButton"
 import Caution from "../../../components/Caution"
+import { generateMnemonic } from "./web3auth"
 
 const CreateAccountMnemonicForm = () => {
   const navigate = useNavigate()
   const { create } = useManageAccount()
   const { register, handleSubmit, formState } = useForm<{ mnemonic: string }>({ defaultValues: 
-    { mnemonic: "harvest end grab embark oxygen rifle divorce purchase marble member expire zone vintage panic rich average siege tennis page mixed drip eight mistake make" } })
+    { mnemonic: generateMnemonic().mnemonic } })
 
   const submit = handleSubmit(async ({ mnemonic }) => {
     await create({ type: "mnemonic", address: "", mnemonic, index: 0 })

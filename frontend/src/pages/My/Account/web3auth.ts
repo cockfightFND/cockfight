@@ -4,6 +4,7 @@ import { OpenloginAdapter } from "@web3auth/openlogin-adapter"
 import { CommonPrivateKeyProvider } from "@web3auth/base-provider"
 import { WEB3AUTH_KEY, WEB3AUTH_SECRET, RPC_URL } from "../../../data/constants"
 import { whitelistUrl } from "@toruslabs/openlogin"
+import {  MnemonicKey } from "@initia/initia.js"
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.OTHER,
@@ -13,6 +14,10 @@ const chainConfig = {
   blockExplorer: "",
   ticker: "INIT",
   tickerName: "Initia",
+}
+
+export function generateMnemonic(){
+  return new MnemonicKey()
 }
 
 export async function requestUserInfo(loginProvider: string) {
