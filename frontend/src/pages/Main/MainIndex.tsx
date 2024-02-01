@@ -40,10 +40,6 @@ const  MainIndex = () => {
   
   return (
     <>
-     {
-      address ?
-      <CreateAccount />
-      :
       <Stack spacing={24}>
         <Title c="brand" ff="Fontdiner Swanky" fw={400} fz={28} mt={24} mb={16}>
           CockFight
@@ -52,8 +48,6 @@ const  MainIndex = () => {
         <GameCarousel></GameCarousel>
         <CountdownBox targetTime={nextEggTime?.next_egg_time ?? ''}></CountdownBox>
       </Stack>
-     }
-      
     </>
   )
 }
