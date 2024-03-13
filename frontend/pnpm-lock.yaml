@@ -32,15 +32,12 @@ dependencies:
   '@initia/initia.proto':
     specifier: ^0.1.23
     version: 0.1.27
-  '@initia/react-api':
-    specifier: ^0.2.0
-    version: 0.2.0
   '@initia/react-components':
     specifier: ^0.6.0
     version: 0.6.0(@initia/utils@0.4.0)(bignumber.js@9.1.2)
   '@initia/shared':
     specifier: ^0.9.0
-    version: 0.9.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@initia/initia.proto@0.1.27)(@initia/opinit.proto@0.0.2)(zod@3.22.4)
+    version: 0.9.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@initia/initia.proto@0.1.27)(@initia/opinit.proto@0.0.3)(zod@3.22.4)
   '@initia/use-essentials':
     specifier: ^0.53.0
     version: 0.53.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@initia/initia.proto@0.1.27)(@initia/query@0.8.0)(@initia/react-api@0.2.0)(@initia/shared@0.9.0)(@initia/utils@0.4.0)(@lukemorales/query-key-factory@1.3.4)(axios@1.5.0)(bignumber.js@9.1.2)(ethers@6.11.1)(ramda@0.29.0)(zod@3.22.4)
@@ -2288,15 +2285,6 @@ packages:
     resolution: {integrity: sha512-sTMCHrpvEOqXcoddfbN8WYBd9FNPc31s6KFtazse3ajQkOOaEzY+mrw1Sz3N61EzBx0/l4SW9mmQKfboTNRzRw==}
     dev: true
 
-  /@initia/opinit.proto@0.0.2:
-    resolution: {integrity: sha512-uUd00KNJXwJbWW3umfZL91HJAHGyOs5ZcwPlQEfdSCryyuT2hlvC+6NFLa+b8V01Ed0NNeKm44Zmc4kkBfcFzg==}
-    dependencies:
-      '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.2)
-      google-protobuf: 3.21.2
-      long: 5.2.3
-      protobufjs: 7.2.6
-    dev: false
-
   /@initia/opinit.proto@0.0.3:
     resolution: {integrity: sha512-JDZz9124Y+WvjTl+jXQgq0CczqGwbaxSEsyfo/Gt/7wbh34GWbhZhKFiAzD8ABTLT3NIxxfw0BBlXOKHj2xfVw==}
     dependencies:
@@ -2332,7 +2320,7 @@ packages:
       bignumber.js: 9.1.2
     dev: false
 
-  /@initia/shared@0.9.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@initia/initia.proto@0.1.27)(@initia/opinit.proto@0.0.2)(zod@3.22.4):
+  /@initia/shared@0.9.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@initia/initia.proto@0.1.27)(@initia/opinit.proto@0.0.3)(zod@3.22.4):
     resolution: {integrity: sha512-CNxjLVx8gRASAkIvQ1hO6/9r3jvrJO2oZuawtjmm/yzQOs2vbZR7EEF9OczzGQhGrCp76RrkONvTTXTq857Csg==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
@@ -2347,7 +2335,7 @@ packages:
       '@cosmjs/stargate': 0.32.2
       '@cosmjs/tendermint-rpc': 0.32.2
       '@initia/initia.proto': 0.1.27
-      '@initia/opinit.proto': 0.0.2
+      '@initia/opinit.proto': 0.0.3
       zod: 3.22.4
     dev: false
 
@@ -2373,7 +2361,7 @@ packages:
       '@initia/initia.proto': 0.1.27
       '@initia/query': 0.8.0(@cosmjs/encoding@0.32.2)(@mysten/bcs@0.10.1)(@noble/hashes@1.3.3)
       '@initia/react-api': 0.2.0
-      '@initia/shared': 0.9.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@initia/initia.proto@0.1.27)(@initia/opinit.proto@0.0.2)(zod@3.22.4)
+      '@initia/shared': 0.9.0(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@initia/initia.proto@0.1.27)(@initia/opinit.proto@0.0.3)(zod@3.22.4)
       '@initia/utils': 0.4.0(bignumber.js@9.1.2)(numeral@2.0.6)(ramda@0.29.0)
       '@lukemorales/query-key-factory': 1.3.4(@tanstack/query-core@4.36.1)(@tanstack/react-query@4.33.0)
       '@types/ramda': 0.29.11
