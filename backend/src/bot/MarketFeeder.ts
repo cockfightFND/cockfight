@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { config } from 'config'
-import { CONTRACT_HEX_ADDRESS, CONTRACT_MODULE_NAME } from 'lib/constants'
 import { MarketEntity, UserEntity } from 'orm'
 import { EntityManager } from 'typeorm'
 import { Bot } from './Bot'
 import { getModuleStoreWithRetry } from 'lib/retry'
-import { YIELD_PER_CHICKEN } from './RewardFeeder'
 
 const MARKET_FEED_INTERVAL = 60 * 1000
 

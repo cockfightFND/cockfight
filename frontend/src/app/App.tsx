@@ -6,7 +6,6 @@ import { Outlet, useLocation } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { InitiaEssentialsProvider } from "@initia/use-essentials"
 import { ErrorBoundary } from "@initia/react-api"
-import { GamesProvider, getGames } from "../vendors/games"
 import fonts from "../styles/fonts"
 import theme from "../styles/theme"
 import { useIsDrawMenu } from "../styles/colorScheme"
@@ -22,9 +21,6 @@ const App = () => {
   const address = useAddress()
   const { pathname } = useLocation()
 
-  /* data */
-  const { data: games } = useQuery({ queryKey: ["games"], queryFn: getGames })
-
   /* styles */
   const isDrawMenu = useIsDrawMenu()
   const backgroundColor = useRecoilValue(backgroundColorState)
@@ -33,11 +29,9 @@ const App = () => {
   const fixedBottomHeight = useRecoilValue(fixedBottomHeightState)
 
   const paddingBottom = navigationHeight + GLOBAL_PADDING + (fixedBottomHeight ? fixedBottomHeight + GLOBAL_PADDING : 0)
-  
-  if (!games) return null
+
 
   return (
-    <GamesProvider value={games}>
       <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
         <ModalsProvider>
           <Global styles={fonts} />
@@ -78,7 +72,6 @@ const App = () => {
           </InitiaEssentialsProvider>
         </ModalsProvider>
       </MantineProvider>
-    </GamesProvider>
   )
 }
 

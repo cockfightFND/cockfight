@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { config } from 'config'
-import { CONTRACT_HEX_ADDRESS, CONTRACT_MODULE_NAME } from 'lib/constants'
-import { MarketEntity, UserEntity } from 'orm'
+import { UserEntity } from 'orm'
 import { EntityManager, TableExclusion } from 'typeorm'
 import { Bot } from './Bot'
 import { getAllTableEntries, getResource } from 'lib/lcd'
@@ -11,26 +10,6 @@ import { getModuleStoreWithRetry } from 'lib/retry'
 
 export const REWARD_FEED_INTERVAL = 60 * 1000
 export const YIELD_PER_CHICKEN = 2
-
-interface Table {
-  handle: string
-  length: string
-}
-
-
-interface CockfightModuleStore {
-  deposit_extend_ref: any
-  prize_extend_ref: any
-  deposit_store: string
-  prize_store: string
-  total_chickens: number
-  chicken_price: number
-  egg_price: number
-  chickens: Table
-  eggs: Table
-  cock_fight: Table
-}
-
 
 interface ChickenMap {
   [address: AccAddress]: number

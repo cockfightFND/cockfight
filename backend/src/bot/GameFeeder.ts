@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { config } from 'config'
-import { CONTRACT_HEX_ADDRESS, CONTRACT_MODULE_NAME } from 'lib/constants'
 import { BettingEntity, GameEntity } from 'orm'
 import { EntityManager } from 'typeorm'
 import { Bot } from './Bot'

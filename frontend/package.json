@@ -13,6 +13,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@aptos-labs/ts-sdk": "^1.9.1",
     "@cosmjs/amino": "^0.32.2",
     "@cosmjs/crypto": "^0.32.2",
     "@cosmjs/proto-signing": "^0.32.2",
@@ -21,7 +22,6 @@
     "@cosmjs/utils": "^0.32.2",
     "@initia/initia.js": "^0.1.28",
     "@initia/initia.proto": "^0.1.23",
-    "@initia/query": "^0.8.0",
     "@initia/react-api": "^0.2.0",
     "@initia/react-components": "^0.6.0",
     "@initia/shared": "^0.9.0",

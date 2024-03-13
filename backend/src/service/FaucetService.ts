@@ -1,23 +1,24 @@
-import { Coins, MsgSend } from "@initia/initia.js"
-import { contract } from "lib/wallet"
+import { getAptosFaucetToken } from "./aptos/getFaucetToken"
+import { getInitiaFaucetToken } from "./initia/getFaucetToken"
+import { APIError, ErrorTypes } from "lib/error"
 
 interface GetTokensParam {
-    address: string
+    network: string,
+    address: string,
+    amount: number
 }
   
 export async function getTokens(
     req: GetTokensParam
 ) {
-    try { 
-        const token = new Coins({ uinit: 100_000_000 })
-        const msg = new MsgSend(
-            contract.key.accAddress,
-            req.address,
-            { uinit: 100_000_000 }
-        )
-        await contract.transaction([msg])
-        return token
+    const network = req.network
+    const address = req.address
+    const amount = req.amount
+    try {
+        if (network === 'aptos') return await getAptosFaucetToken(address, amount)
+        if (network === 'initia') return await getInitiaFaucetToken(address, amount)
     } catch (err) {
         console.log(err)
+        throw new APIError(ErrorTypes.API_ERROR, 'Failed to get tokens')
     }
 }

@@ -82,6 +82,7 @@ module addr::cockfight {
     //
     // Helper functions
     //
+    
     public fun uinit_metadata(): Object<Metadata> {
         coin::metadata(@initia_std, string::utf8(UINIT_SYMBOL))
     }
