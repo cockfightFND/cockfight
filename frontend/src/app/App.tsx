@@ -5,7 +5,6 @@ import { Notifications } from "@mantine/notifications"
 import { Outlet, useLocation } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { InitiaEssentialsProvider } from "@initia/use-essentials"
-import { ErrorBoundary } from "@initia/react-api"
 import fonts from "../styles/fonts"
 import theme from "../styles/theme"
 import { useIsDrawMenu } from "../styles/colorScheme"
@@ -33,7 +32,7 @@ const App = () => {
 
   return (
       <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
-        <ModalsProvider>
+      <ModalsProvider>
           <Global styles={fonts} />
 
           <Global

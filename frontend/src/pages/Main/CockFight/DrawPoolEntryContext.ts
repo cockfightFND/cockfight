@@ -1,4 +1,4 @@
-import { createContext } from "@initia/react-api"
+import { createContext } from "@initia/react-components"
 import type { PoolResponse } from "@initia/marketplace-api-types"
 
 interface Props {
