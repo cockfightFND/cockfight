@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react"
 import { Box, Group, Text } from "@mantine/core"
 import type BigNumber from "bignumber.js"
-import { formatAmount } from "@initia/utils"
+import { formatAmount } from "../../utils/format"
 import Icon from "../styles/icons/Icon"
 import { SUBMIT_MARGIN } from "../styles/variables"
 import SubmitButton from "./SubmitButton"

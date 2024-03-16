@@ -1,6 +1,6 @@
 import { Fragment } from "react"
 import { Flex, Group, Stack, Text } from "@mantine/core"
-import { formatAmount } from "@initia/utils"
+import { formatAmount } from "../../utils/format"
 import type { HistoryData } from "@initia/marketplace-api-types/dist/common/history-data"
 import actionToActivity from "../utils/actionToActivity"
 import Icon from "../styles/icons/Icon"

@@ -9,18 +9,17 @@ import { GasPrice, SigningStargateClient, StargateClient, isDeliverTxFailure } f
 import { stringToPath } from "@cosmjs/crypto"
 import type { TendermintClient } from "@cosmjs/tendermint-rpc"
 import { Tendermint37Client } from "@cosmjs/tendermint-rpc"
-import { useInitiaEssentials, useAllBalances } from "@initia/use-essentials"
-import { createDefaultRegistry } from "@initia/shared"
 import { GAS_PRICE, INIT_DENOM, RPC_URL } from "./constants"
 import BigNumber from "bignumber.js"
 
 type Account = MnemonicAccount | PrivateKeyAccount
 const stargateClient = await StargateClient.connect(RPC_URL)
-const clientOptions = {
-  registry: createDefaultRegistry(),
-  gasPrice: GasPrice.fromString(GAS_PRICE),
-}
+// const clientOptions = {
+//   registry: null, //createDefaultRegistry(),
+//   gasPrice: GasPrice.fromString(GAS_PRICE),
+// }
 
+const clientOptions = {}
 interface MnemonicAccount {
   type: "mnemonic"
   address: string
@@ -194,8 +193,5 @@ export function useAddress() {
 
 export function useBalance() {
   const address = useAddress()
-  const { chain } = useInitiaEssentials()
-  const { data: balances } = useAllBalances(chain.rpc, address)
-  const balance = balances?.find(({ denom }) => denom === INIT_DENOM)?.amount
-  return balance || "0"
+  return "0"
 }

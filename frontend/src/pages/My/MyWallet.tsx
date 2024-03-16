@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
 import { UnstyledButton } from "@mantine/core"
-import { truncate } from "@initia/utils"
 import { useAddress } from "../../data/account"
 import { GLOBAL_PADDING } from "../../styles/variables"
 import Icon from "../../styles/icons/Icon"
 import BackButtonBar from "../../components/BackButtonBar"
 import Caution from "../../components/Caution"
+import { truncate } from "../../utils/format"
 
 const MyWallet = () => {
   const address = useAddress()

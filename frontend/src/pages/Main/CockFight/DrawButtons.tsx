@@ -7,8 +7,7 @@ import Icon from "../../../styles/icons/Icon"
 import { useBalance } from "../../../data/account"
 import NumberButton from "./NumberButton"
 import { useDrawPoolEntry } from "./DrawPoolEntryContext"
-import { formatAmount } from "@initia/utils"
-import { Num } from "@initia/react-components"
+import { formatAmount } from "../../utils/format"
 import FixedBottom from "../../../components/FixedBottom"
 
 interface Props extends BoxProps {

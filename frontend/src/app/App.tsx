@@ -4,7 +4,6 @@ import { ModalsProvider } from "@mantine/modals"
 import { Notifications } from "@mantine/notifications"
 import { Outlet, useLocation } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
-import { InitiaEssentialsProvider } from "@initia/use-essentials"
 import fonts from "../styles/fonts"
 import theme from "../styles/theme"
 import { useIsDrawMenu } from "../styles/colorScheme"
@@ -46,29 +45,15 @@ const App = () => {
           <Notifications />
           <ScrollToTop />
 
-          <InitiaEssentialsProvider
-            chain={{
-              rpc: RPC_URL,
-              rest: REST_URL,
-              key: NETWORK_KEY,
-              api: API_URL,
-              modules: {},
-              list: {},
-            }}
-            address={address}
-          >
-            <Container p={GLOBAL_PADDING} pb={paddingBottom}>
-              <ErrorBoundary key={pathname.includes("create/draw") ? "create/draw" : pathname}>
-                <Outlet />
-              </ErrorBoundary>
-            </Container>
+          <Container p={GLOBAL_PADDING} pb={paddingBottom}>
+              <Outlet />
+          </Container>
 
-            {showNavigationBar && (
-              <Container pos="fixed" bottom={0} left={0} right={0} sx={{ zIndex: 100 }}>
-                <Navigation />
-              </Container>
-            )}
-          </InitiaEssentialsProvider>
+          {showNavigationBar && (
+            <Container pos="fixed" bottom={0} left={0} right={0} sx={{ zIndex: 100 }}>
+              <Navigation />
+            </Container>
+          )}
         </ModalsProvider>
       </MantineProvider>
   )

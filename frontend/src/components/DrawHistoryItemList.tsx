@@ -1,7 +1,7 @@
 import { partition } from "ramda"
 import { Box, Group, Image, Stack, Text } from "@mantine/core"
 import type { DrawCount, TicketResponse } from "@initia/marketplace-api-types"
-import { truncate } from "@initia/utils"
+import { truncate } from "../../utils/format"
 import { useIsDrawMenu } from "../styles/colorScheme"
 import PrizeIcon from "./PrizeIcon"
 

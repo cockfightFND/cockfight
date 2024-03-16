@@ -1,7 +1,6 @@
 import { Box, Group, Image, Modal, Stack, Text, UnstyledButton } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
-import { formatAmount, formatPercent } from "@initia/utils"
-import { Num } from "@initia/react-components"
+import { formatAmount, formatPercent } from "../../utils/format"
 import Icon from "../../../styles/icons/Icon"
 import { DRAW_POOL_CARD_RADIUS } from "./card"
 import { useDrawPoolEntry } from "./DrawPoolEntryContext"

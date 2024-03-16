@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { modals } from "@mantine/modals"
 import { useGetModuleStore } from '../../data/query';
 import { useAPI } from '../../data/api';
-import { formatAmount } from '@initia/utils';
+import { formatAmount } from "../../utils/format";
 
 interface FormValues {
   isBuy: boolean

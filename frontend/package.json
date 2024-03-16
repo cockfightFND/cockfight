@@ -22,9 +22,6 @@
     "@cosmjs/utils": "^0.32.2",
     "@initia/initia.js": "^0.1.28",
     "@initia/initia.proto": "^0.1.23",
-    "@initia/react-components": "^0.13.0",
-    "@initia/use-essentials": "^0.63.0",
-    "@initia/utils": "^0.20.0",
     "@mantine/carousel": "^6.0.20",
     "@mantine/core": "^6.0.20",
     "@mantine/dates": "^6.0.20",
@@ -47,6 +44,7 @@
     "embla-carousel-react": "8.0.0-rc12",
     "nanoid": "^4.0.2",
     "nanoid-dictionary": "^4.3.0",
+    "numeral": "^2.0.6",
     "qs": "^6.11.2",
     "ramda": "^0.29.0",
     "react": "^18.2.0",
@@ -62,7 +60,6 @@
     "sha3": "^2.1.4"
   },
   "devDependencies": {
-    "@initia/marketplace-api-types": "^1.1.1",
     "@rollup/plugin-inject": "^5.0.4",
     "@tsconfig/vite-react": "^2.0.0",
     "@types/nanoid-dictionary": "^4.2.0",
@@ -73,7 +70,6 @@
     "@types/react-google-recaptcha": "^2.1.5",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "eslint": "^8.48.0",
-    "eslint-config-initia-app": "^0.0.0",
     "eslint-config-react-app": "^7.0.1",
     "lint-staged": "^14.0.1",
     "node-stdlib-browser": "^1.2.0",

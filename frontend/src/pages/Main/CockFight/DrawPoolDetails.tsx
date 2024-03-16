@@ -1,5 +1,5 @@
 import { Group, Stack, Tabs, Text, Title } from "@mantine/core"
-import { formatPercent, truncate } from "@initia/utils"
+import { formatPercent, truncate } from "../../utils/format"
 import BoxList from "../../../components/BoxList"
 import CircleImage from "../../../components/CircleImage"
 import Icon from "../../../styles/icons/Icon"

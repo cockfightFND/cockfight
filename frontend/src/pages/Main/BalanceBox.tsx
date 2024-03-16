@@ -3,7 +3,8 @@ import { Link } from "react-router-dom"
 import CircleImage from "../../components/CircleImage"
 import { ChickenImages, EggImages } from "../Custom/items"
 import { useGetModuleStore } from "../../data/query"
-import { formatAmount } from "@initia/utils"
+import { formatAmount } from "../../utils/format"
+// import { formatAmount } from "../../utils/format"
 
 const BalanceBox = ({ chickenNum, eggNum }: { chickenNum: number, eggNum: number }) => {
     const { data: moduleResponse } = useGetModuleStore()

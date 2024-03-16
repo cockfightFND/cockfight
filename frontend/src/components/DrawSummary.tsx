@@ -1,6 +1,6 @@
 import { Box, Group, Stack, Text } from "@mantine/core"
 import { Link } from "react-router-dom"
-import { formatAmount, formatPercent } from "@initia/utils"
+import { formatAmount, formatPercent } from "../../utils/format"
 import type { PoolResponse } from "@initia/marketplace-api-types"
 import Icon from "../styles/icons/Icon"
 import AspectImage from "./AspectImage"

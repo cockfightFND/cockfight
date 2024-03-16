@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom"
 import { Button, Group, Stack, Text } from "@mantine/core"
-import { truncate } from "@initia/utils"
+// import { truncate } from "../../utils/format"
 import { useManageAccount } from "../../../data/account"
 import { GLOBAL_PADDING } from "../../../styles/variables"
 import BackButtonBar from "../../../components/BackButtonBar"
+import { truncate } from "../../../utils/format"
 
 const ManageAccounts = () => {
   const navigate = useNavigate()
