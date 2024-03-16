@@ -12,7 +12,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <RecoilRoot>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </QueryClientProvider>
-      
+    </QueryClientProvider>      
   </RecoilRoot>,
 )

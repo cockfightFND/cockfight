@@ -3,7 +3,7 @@ import { CopyButton, Group, Stack, Text, UnstyledButton } from "@mantine/core"
 // import { formatAmount, truncate } from "../../utils/format"
 import { useAddress, useBalance } from "../../data/account"
 import Icon from "../../styles/icons/Icon"
-import { formatAmount } from "../../utils/format"
+import { formatAmount, truncate } from "../../utils/format"
 
 const MyIndexBalance = () => {
   const address = useAddress()
