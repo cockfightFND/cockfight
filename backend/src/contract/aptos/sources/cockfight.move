@@ -64,7 +64,7 @@ module deployer::cockfight {
                 let coins = coin::extract(coins, prize);
                 coin::deposit(*addr, coins);
             });
-        };
+    };
 
         winners
     }

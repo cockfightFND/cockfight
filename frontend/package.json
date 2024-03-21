@@ -14,6 +14,8 @@
   ],
   "dependencies": {
     "@aptos-labs/ts-sdk": "^1.9.1",
+    "@aptos-labs/wallet-adapter-ant-design": "^2.0.0",
+    "@aptos-labs/wallet-adapter-react": "^2.1.8",
     "@cosmjs/amino": "^0.32.2",
     "@cosmjs/crypto": "^0.32.2",
     "@cosmjs/proto-signing": "^0.32.2",
@@ -45,6 +47,7 @@
     "nanoid": "^4.0.2",
     "nanoid-dictionary": "^4.3.0",
     "numeral": "^2.0.6",
+    "petra-plugin-wallet-adapter": "^0.4.4",
     "qs": "^6.11.2",
     "ramda": "^0.29.0",
     "react": "^18.2.0",
