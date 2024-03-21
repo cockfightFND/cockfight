@@ -1,4 +1,4 @@
-module addr::cockfight{
+module deployer::cockfight {
     use std::vector;
     use std::signer;
 
@@ -40,7 +40,6 @@ module addr::cockfight{
     public fun get_betting_price(): u64 { TICKET_PRICE }
 
     public(friend) fun new_betting(user: &signer, game_id: u64, position: u64, amount: u64): Betting {
-        
         Betting { 
             addr: signer::address_of(user), 
             position,

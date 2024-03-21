@@ -1,4 +1,4 @@
-module addr::cockfight {
+module deployer::cockfight {
     use std::hash::sha3_256;
     use std::error;
     use std::signer;
@@ -88,7 +88,7 @@ module addr::cockfight {
     }
 
     fun check_operator_permission(operator: &signer) {
-        assert!(signer::address_of(operator) == @addr, error::permission_denied(EUNAUTHORIZED));
+        assert!(signer::address_of(operator) == @deployer, error::permission_denied(EUNAUTHORIZED));
     }
 
     fun generate_module_seed(): vector<u8>{
@@ -106,7 +106,7 @@ module addr::cockfight {
         egg_price: u64,
     ) {
         check_operator_permission(operator);
-        assert!(!exists<ModuleStore>(@addr), error::already_exists(EMODULE_STORE_ALREADY_EXISTS));
+        assert!(!exists<ModuleStore>(@deployer), error::already_exists(EMODULE_STORE_ALREADY_EXISTS));
 
         let constructor_ref = object::create_named_object(operator, b"cockfight", false);
         let extend_ref = object::generate_extend_ref(&constructor_ref);
@@ -131,7 +131,7 @@ module addr::cockfight {
         egg_price: u64,
     ) acquires ModuleStore {
         check_operator_permission(operator);
-        let module_store = borrow_global_mut<ModuleStore>(@addr);
+        let module_store = borrow_global_mut<ModuleStore>(@deployer);
 
         assert!(chicken_price > egg_price && egg_price > 0, error::invalid_argument(EINVALID_PRICE_INITIALIZATION));
         module_store.chicken_price = chicken_price;
@@ -179,7 +179,7 @@ module addr::cockfight {
     ) acquires ModuleStore {
         check_operator_permission(operator);
 
-        let module_store = borrow_global_mut<ModuleStore>(@addr);
+        let module_store = borrow_global_mut<ModuleStore>(@deployer);
         
         assert!(!table::contains(&mut module_store.cock_fights, game_id), error::already_exists(EGAME_ALREADY_EXISTS));
         let cock_fight = CockFight {
@@ -198,7 +198,7 @@ module addr::cockfight {
     fun fund_prize(
         prize: FungibleAsset
     ) {
-        primary_fungible_store::deposit(@addr, prize );
+        primary_fungible_store::deposit(@deployer, prize );
     }
 
     fun buy_chicken(
@@ -206,7 +206,7 @@ module addr::cockfight {
         metadata: Object<Metadata>,
         num: u64,
     ) acquires ModuleStore {
-        let module_store = borrow_global_mut<ModuleStore>(@addr);
+        let module_store = borrow_global_mut<ModuleStore>(@deployer);
         let deposit_amount = module_store.chicken_price * num;
         assert!(coin::balance(signer::address_of(account), metadata) >= deposit_amount, error::invalid_argument(EINSUFFICIENT_BALANCE));
 
@@ -236,7 +236,7 @@ module addr::cockfight {
         metadata: Object<Metadata>,
         num: u64,
     ) acquires ModuleStore {
-        let module_store = borrow_global_mut<ModuleStore>(@addr);
+        let module_store = borrow_global_mut<ModuleStore>(@deployer);
         let withdraw_amount = module_store.chicken_price * num;
         let module_signer = object::generate_signer_for_extending(&module_store.extend_ref);
 
@@ -266,7 +266,7 @@ module addr::cockfight {
     ): vector<u8> {
         let target_hash = {
             let betting_data = vector::empty<u8>();
-            vector::append(&mut betting_data, bcs::to_bytes(&@addr));
+            vector::append(&mut betting_data, bcs::to_bytes(&@deployer));
             vector::append(&mut betting_data, bcs::to_bytes(&account_addr));
             vector::append(&mut betting_data, bcs::to_bytes(&position));
             vector::append(&mut betting_data, bcs::to_bytes(&eggs));
@@ -334,7 +334,7 @@ module addr::cockfight {
 
     #[view]
     public fun get_module_store(): ModuleResponse acquires ModuleStore {
-        let module_store = borrow_global<ModuleStore>(@addr);
+        let module_store = borrow_global<ModuleStore>(@deployer);
         
         ModuleResponse {
             total_chickens: module_store.total_chickens,
@@ -348,7 +348,7 @@ module addr::cockfight {
 
     #[view]
     public fun get_user_chickens(account: address): u64 acquires ModuleStore {
-        let module_store = borrow_global<ModuleStore>(@addr);
+        let module_store = borrow_global<ModuleStore>(@deployer);
         if (table::contains(&module_store.chickens, account)) {
             *table::borrow(&module_store.chickens, account)
         } else {
@@ -403,7 +403,7 @@ module addr::cockfight {
         (mint_cap, metadata)
     }
 
-    #[test(chain=@0x1, operator=@addr, user=@0x123)]
+    #[test(chain=@0x1, operator=@deployer, user=@0x123)]
     fun test_trade_chicken(
         chain: &signer,
         operator: &signer,
