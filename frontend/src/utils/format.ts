@@ -41,11 +41,17 @@ export function formatNumber(value?: BigNumber.Value, config?: Partial<FormatCon
 }
 
 /* amount */
-export function formatAmount(value?: BigNumber.Value, config?: Partial<FormatConfig>) {
-  if (!value || BigNumber(value).isNaN()) return "0"
-  const { decimals } = getConfig(config)
-  return formatNumber(new BigNumber(value).div(new BigNumber(10).pow(decimals)), config)
+export function formatAmount(value?: BigNumber.Value, config?: Partial<FormatConfig> | number) {
+  console.log(value);
+  if (!value || BigNumber(value).isNaN()) return "0";
+  if (typeof config === 'number') {
+    return new BigNumber(value).div(new BigNumber(10).pow(config)).toString();
+  } else {
+    const { decimals } = getConfig(config);
+    return formatNumber(new BigNumber(value).div(new BigNumber(10).pow(decimals)), config);
+  }
 }
+
 
 export function toAmount(value?: BigNumber.Value, decimals = 6) {
   if (!value || BigNumber(value).isNaN()) return "0"
@@ -70,4 +76,3 @@ export function truncate(text: string = "", [h, t] = [6, 6]) {
     const tail = text.slice(-1 * t, text.length)
     return text.length > h + t ? [head, tail].join("...") : text
 }
-  
