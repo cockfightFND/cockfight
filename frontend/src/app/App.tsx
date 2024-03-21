@@ -14,6 +14,7 @@ import ScrollToTop from "../components/ScrollToTop"
 import Container from "../components/Container"
 import { backgroundColorState, fixedBottomHeightState, isBuyState, navigationBarHeightState, showNavigationBarState } from "./hooks"
 import Navigation from "./Navigation"
+import { WalletProvider } from "../walletProvider"
 
 const App = () => {
   const address = useAddress()
@@ -31,6 +32,7 @@ const App = () => {
 
   return (
       <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
+      <WalletProvider chain={1}>
       <ModalsProvider>
           <Global styles={fonts} />
 
@@ -55,6 +57,7 @@ const App = () => {
             </Container>
           )}
         </ModalsProvider>
+        </WalletProvider>
       </MantineProvider>
   )
 }
