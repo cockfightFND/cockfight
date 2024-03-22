@@ -1,4 +1,4 @@
-module deployer::cockfight {
+module deployer::random {
     use std::vector;
     use std::signer;
 

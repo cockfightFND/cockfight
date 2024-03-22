@@ -135,7 +135,7 @@ const MarketModal = ({ onClose }: {onClose: any}) => {
     >
       <Text size="md" style={{ marginBottom: '20px', fontWeight: 500 }}>Would you buy this one?</Text>
       
-      <Text size="sm" style={{ marginBottom: '10px' }}>Buy Price: {formatAmount(market?.markets? market.markets[0].chickenPrice : 0)} INIT</Text>
+      <Text size="sm" style={{ marginBottom: '10px' }}>Buy Price: {formatAmount(market?.markets? market.markets[0].chickenPrice : 0)} </Text>
       <Text size="sm" style={{ marginBottom: '10px' }}>Sell Price: {formatAmount(market?.markets? market.markets[0].chickenPrice : 0)} INIT</Text>
       <Text size="sm" style={{ marginBottom: '20px' }}>Egg Production: 2 eggs</Text>
 

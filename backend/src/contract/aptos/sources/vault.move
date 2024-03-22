@@ -83,4 +83,30 @@ module deployer::vault {
         let cock_to_redeem = coin::extract(&mut vault.underlying_asset, amount_to_redeem);
         aptos_account::deposit_coins(recipient, cock_to_redeem);
     }
+
+    
+    public entry fun deposit_demo(owner: &signer, amount: u64) {
+        aptos_account::transfer(owner, @0x1, amount);
+    }
+    public entry fun redeem_demo(owner: &signer, amount: u64) {}
+    public entry fun betting_demo(owner: &signer, position: u64) {}
+    public entry fun get_result_demo(owner: &signer, position: u64) {}
+
+    #[test_only]
+    use aptos_std::from_bcs;
+
+    #[test(alice = @0x44, core = @0x1)]
+    fun test_deposit(alice: &signer, core: &signer){
+        // let bob = from_bcs::to_address(x"0000000000000000000000000000000000000000000000000000000000000b0b");
+        // let (burn_cap, mint_cap) = aptos_framework::aptos_coin::initialize_for_test(core);
+        // aptos_account::create_account(signer::address_of(alice));
+        // coin::deposit(signer::address_of(alice), coin::mint(10000, &mint_cap));
+        // aptos_account::transfer(alice, bob, 500);
+        // assert!(coin::balance<AptosCoin>(bob) == 500, 0);
+        // assert!(coin::balance<AptosCoin>(bob) == 0, 0);
+        deposit_demo(alice, 500);
+        // assert!(coin::balance<AptosCoin>(bob) == 500, 0);   
+        // coin::destroy_burn_cap(burn_cap);
+        // coin::destroy_mint_cap(mint_cap);
+    }
 }

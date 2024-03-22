@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Bot } from 'bot/Bot'
 import { BettingEntity, GameEntity } from 'orm'
 import { EntityManager } from 'typeorm'
-import { Bot } from './Bot'
 
-const GAME_FEED_INTERVAL = 5 * 60 * 1000 // 5 min
+
+const GAME_FEED_INTERVAL = 5 * 60 * 1000
 
 export class GameFeeder extends Bot {
   async getLastGameEntity(manager: EntityManager): Promise<GameEntity | null> {
@@ -70,7 +71,8 @@ export class GameFeeder extends Bot {
       }
     }
   }
-  
+
+
   async endGame(manager: EntityManager): Promise<void> {
     const games = await manager.getRepository(GameEntity).find({
       where: { isEnded: false }

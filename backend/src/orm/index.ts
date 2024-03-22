@@ -19,6 +19,18 @@ export * from './MarketEntity'
 export * from './DashboardEntity'
 export * from './UserEntity'
 
+import { AptosBettingEntity } from './aptos/AptosBettingEntity'
+import { AptosGameEntity } from './aptos/AptosGameEntity'
+import { AptosMarketEntity } from './aptos/AptosMarketEntity'
+import { AptosDashboardEntity } from './aptos/AptosDashboardEntity'
+import { AptosUserEntity } from './aptos/AptosUserEntity'
+
+export * from './aptos/AptosBettingEntity'
+export * from './aptos/AptosGameEntity'
+export * from './aptos/AptosMarketEntity'
+export * from './aptos/AptosDashboardEntity'
+export * from './aptos/AptosUserEntity'
+
 export const staticOptions = {
   supportBigNumbers: true,
   bigNumberStrings: true,
@@ -27,7 +39,14 @@ export const staticOptions = {
     GameEntity,
     MarketEntity,
     DashboardEntity,
-    UserEntity
+    UserEntity,
+
+    /// APTOS
+    AptosBettingEntity,
+    AptosGameEntity,
+    AptosMarketEntity,
+    AptosDashboardEntity,
+    AptosUserEntity
   ],
 }
 

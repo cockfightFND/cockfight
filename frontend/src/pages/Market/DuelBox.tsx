@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Image, Modal, Text } from '@mantine/core'; // Replace with actual imports
-import MarketModal from './MarketModal';
+import MarketModal from './aptos/MarketModal';
+// import MarketModal from './MarketModal';
 
 const DuelBox = ({ stableChicken, volatileChicken }: {stableChicken: string, volatileChicken: string}) => {
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +37,7 @@ const DuelBox = ({ stableChicken, volatileChicken }: {stableChicken: string, vol
           />
         </Box>
       </Box>
+      {/* {showModal && <MarketModal onClose={() => setShowModal(false)} />} */}
       {showModal && <MarketModal onClose={() => setShowModal(false)} />}
     </>
   );
