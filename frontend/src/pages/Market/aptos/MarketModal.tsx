@@ -127,8 +127,8 @@ const MarketModal = ({ onClose }: {onClose: any}) => {
     >
       <Text size="md" style={{ marginBottom: '20px', fontWeight: 500 }}>Would you buy this one?</Text>
       
-      <Text size="sm" style={{ marginBottom: '10px' }}>Buy Price: {formatAmount()} </Text>
-      <Text size="sm" style={{ marginBottom: '10px' }}>Sell Price: {formatAmount()} APT</Text>
+      <Text size="sm" style={{ marginBottom: '10px' }}>Buy Price: 0.01 APT </Text>
+      <Text size="sm" style={{ marginBottom: '10px' }}>Sell Price: 0.01 APT</Text>
       <Text size="sm" style={{ marginBottom: '20px' }}>Egg Production: 2 eggs</Text>
 
       <TextInput
